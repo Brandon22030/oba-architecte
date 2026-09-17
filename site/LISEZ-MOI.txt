@@ -1,0 +1,28 @@
+OBA ARCHITECTES FIRM — export web
+=================================
+
+index.html            le site complet (une seule page, navigation interne en JS)
+support.js            moteur de rendu (requis par index.html)
+benin-geo.js          contours géographiques du Bénin
+benin-map-futur.js    tracé et interactions de la carte Territoire
+image-slot.js         emplacements d'images
+assets/               logos (clair + sombre) et photographies des projets
+
+Mise en service : servir le dossier tel quel (tout chemin est relatif).
+  python3 -m http.server 8000     puis http://localhost:8000
+
+Un seul document, adaptatif. Paliers de largeur :
+  1400 px  marges resserrées, équipe sur 3 colonnes
+  1100 px  menu burger, équipe sur 2 colonnes
+   860 px  header compacté, logo 132 px
+   640 px  une seule colonne, logo 112 px
+   400 px  marges 16 px, logo 98 px
+
+Thème clair / sombre : attribut data-oba-t sur <html> ("sombre" | "clair"),
+mémorisé dans localStorage sous la clé oba-theme. Les couleurs passent par
+les variables CSS --nk, --nk2, --nk3, --pl, --ac et leurs variantes RVB.
+
+Polices : Anybody et IBM Plex Mono (Google Fonts, chargées par le document).
+
+À fournir pour la mise en production : portraits de l'équipe, textes complets
+des 15 projets, adresse de contact officielle.

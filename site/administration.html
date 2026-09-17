@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,100..900&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#EFEAE1;color:#3A3733;font-family:'IBM Plex Sans',sans-serif;-webkit-font-smoothing:antialiased;text-wrap:pretty;font-variant-numeric:tabular-nums;line-height:1.55}
+  a{color:#3A3733;text-decoration:none}
+  a:hover{color:#75590F}
+  button{font-family:inherit;cursor:pointer}
+  input,select,textarea{font-family:inherit}
+  ::selection{background:#A8842B;color:#3A3733}
+  /* Palier unique : sous 1200 px, rien ne sort du cadre */
+  @media (max-width:1200px){
+    [data-r~="shell"]{grid-template-columns:220px minmax(0,1fr) !important}
+    [data-r~="detail"],[data-r~="editor"]{grid-template-columns:minmax(0,1fr) !important}
+    [data-r~="row"]{flex-wrap:wrap !important}
+    [data-r~="table"]{grid-template-columns:2.2fr 1.2fr 1fr 0.9fr 0.8fr !important}
+    [data-r~="four"]{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+    [data-r~="list"]{border-right:none !important;border-bottom:1px solid rgba(58,55,51,.14) !important}
+    main h1{font-size:40px !important}
+  }
+  @media (max-width:900px){
+    [data-r~="shell"]{grid-template-columns:minmax(0,1fr) !important}
+    [data-r~="side"]{position:static !important;height:auto !important}
+    [data-r~="two"],[data-r~="three"],[data-r~="four"]{grid-template-columns:minmax(0,1fr) !important}
+    [data-r~="compo"]{grid-template-columns:44px minmax(0,1fr) !important}
+  }
+</style>
+</helmet>
+
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="200" height="200" fill="#6E6355"/>
+    <rect x="52" y="52" width="30" height="96" fill="#F8F5EE"/>
+    <rect x="92" y="52" width="56" height="40" fill="#F8F5EE"/>
+    <rect x="92" y="100" width="56" height="48" fill="#A8842B"/>
+  </svg>
+</template>
+
+<div data-r="shell" style="display:grid;grid-template-columns:288px minmax(0,1fr);min-height:100vh;align-items:start">
+
+  <aside data-r="list side" style="position:sticky;top:0;height:100vh;background:#E3DCD0;border-right:1px solid rgba(58,55,51,.14);padding:28px 24px;display:flex;flex-direction:column;gap:40px">
+    <div>
+      <img src="assets/logo-oba-cadre.png" alt="OBA Architectes" style="height:26px;width:auto;display:block;filter:none">
+      <p style="margin:18px 0 0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E">Espace d'administration</p>
+    </div>
+    <nav style="display:flex;flex-direction:column;gap:4px">
+      <button onClick="{{ goBord }}" style="{{ sBord }}">Tableau de bord</button>
+      <button onClick="{{ goListe }}" style="{{ sListe }}">Projets</button>
+      <button onClick="{{ goEditeur }}" style="{{ sEditeur }}">Éditeur de projet</button>
+      <button onClick="{{ goBoite }}" style="{{ sBoite }}">Demandes de contact</button>
+    </nav>
+    <div style="margin-top:auto;border-top:1px solid rgba(58,55,51,.14);padding-top:20px">
+      <p style="margin:0;font-size:20px;color:#3A3733">Armel ADIGOUN</p>
+      <p style="margin:6px 0 0;font-size:19px;color:#655B4E">General Manager</p>
+      <a href="index.html" style="display:inline-block;margin-top:20px;font-size:19px;border-bottom:1px solid rgba(58,55,51,.3);padding-bottom:2px">Voir le site public</a>
+    </div>
+  </aside>
+
+  <main style="min-width:0">
+
+    <sc-if value="{{ isBord }}" hint-placeholder-val="{{ true }}">
+    <section data-screen-label="Admin, tableau de bord" style="display:block">
+      <header style="border-bottom:1px solid rgba(58,55,51,.14);padding:40px 32px">
+        <p style="margin:0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E">Tableau de bord</p>
+        <h1 style="margin:16px 0 0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-weight:600;font-size:52px;line-height:1.05;font-stretch:118%;letter-spacing:-.02em">Bonjour Armel. Quatre demandes attendent une réponse.</h1>
+      </header>
+
+      <div style="padding:32px;position:relative">
+        <div style="position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(90deg,rgba(58,55,51,.08) 0 1px,transparent 1px 12.5%)"></div>
+        <div data-r="four" style="position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px">
+          <div style="border-top:1px solid rgba(58,55,51,.3);padding-top:18px">
+            <p style="margin:0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-weight:600;font-size:52px;line-height:1;font-stretch:118%;letter-spacing:-.02em">16</p>
+            <p style="margin:10px 0 0;font-size:19px;color:#655B4E">projets publiés</p>
+          </div>
+          <div style="border-top:1px solid rgba(58,55,51,.3);padding-top:18px">
+            <p style="margin:0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-weight:600;font-size:52px;line-height:1;font-stretch:118%;letter-spacing:-.02em">1</p>
+            <p style="margin:10px 0 0;font-size:19px;color:#655B4E">fiche sans image, au registre filaire</p>
+          </div>
+          <div style="border-top:1px solid rgba(58,55,51,.3);padding-top:18px">
+            <p style="margin:0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-weight:600;font-size:52px;line-height:1;font-stretch:118%;letter-spacing:-.02em">20</p>
+            <p style="margin:10px 0 0;font-size:19px;color:#655B4E">villes rattachées à la carte</p>
+          </div>
+          <div style="border-top:1px solid #A8842B;padding-top:18px">
+            <p style="margin:0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-weight:600;font-size:52px;line-height:1;font-stretch:118%;letter-spacing:-.02em;color:#75590F">4</p>
+            <p style="margin:10px 0 0;font-size:19px;color:#655B4E">demandes non traitées</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:0 32px 48px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px">
+        <div>
+          <div data-r="row" style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid rgba(58,55,51,.14);padding-bottom:14px">
+            <p style="margin:0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E">À compléter en priorité</p>
+            <button onClick="{{ goListe }}" style="background:transparent;border:none;padding:0;font-size:19px;font-weight:500;color:#3A3733;border-bottom:1px solid rgba(58,55,51,.4)">Tout voir</button>
+          </div>
+          <sc-for list="{{ aFaire }}" as="t" hint-placeholder-count="4">
+            <button onClick="{{ goEditeur }}" style="width:100%;text-align:left;background:transparent;border:none;border-bottom:1px solid rgba(58,55,51,.14);padding:20px 0;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:baseline">
+              <span>
+                <span style="display:block;font-size:20px;font-weight:500;color:#3A3733">{{ t.t }}</span>
+                <span style="display:block;margin-top:6px;font-size:19px;color:#655B4E">{{ t.quoi }}</span>
+              </span>
+              <span style="font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#75590F">{{ t.badge }}</span>
+            </button>
+          </sc-for>
+        </div>
+        <div>
+          <div data-r="row" style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid rgba(58,55,51,.14);padding-bottom:14px">
+            <p style="margin:0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E">Dernières demandes</p>
+            <button onClick="{{ goBoite }}" style="background:transparent;border:none;padding:0;font-size:19px;font-weight:500;color:#3A3733;border-bottom:1px solid rgba(58,55,51,.4)">Ouvrir la boîte</button>
+          </div>
+          <sc-for list="{{ recentes }}" as="d" hint-placeholder-count="4">
+            <button onClick="{{ goBoite }}" style="width:100%;text-align:left;background:transparent;border:none;border-bottom:1px solid rgba(58,55,51,.14);padding:20px 0;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:baseline">
+              <span>
+                <span style="display:block;font-size:20px;font-weight:500;color:#3A3733">{{ d.qui }}</span>
+                <span style="display:block;margin-top:6px;font-size:19px;color:#655B4E">{{ d.objet }}</span>
+              </span>
+              <span style="font-size:19px;color:#655B4E">{{ d.quand }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+    </sc-if>
+
+    <sc-if value="{{ isListe }}" hint-placeholder-val="{{ false }}">
+    <section data-screen-label="Admin, liste des projets" style="display:block">
+      <header data-r="row" style="border-bottom:1px solid rgba(58,55,51,.14);padding:40px 32px;display:flex;justify-content:space-between;align-items:flex-end;gap:32px">
+        <div>
+          <p style="margin:0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E">Projets</p>
+          <h1 style="margin:16px 0 0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-weight:600;font-size:52px;line-height:1.05;font-stretch:118%;letter-spacing:-.02em">Seize fiches</h1>
+        </div>
+        <button onClick="{{ goEditeur }}" style="background:#3A3733;color:#EFEAE1;border:none;border-radius:2px;padding:15px 24px;font-size:20px;font-weight:500;border-bottom:2px solid #A8842B">Nouveau projet</button>
+      </header>
+      <div style="padding:24px 32px;border-bottom:1px solid rgba(58,55,51,.14);display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+        <input type="search" placeholder="Rechercher un projet, une ville, un maître d'ouvrage" style="flex:1;min-width:320px;background:#F8F5EE;border:1px solid rgba(58,55,51,.35);border-radius:2px;padding:14px;font-size:20px;color:#3A3733">
+        <select style="background:#F8F5EE;border:1px solid rgba(58,55,51,.35);border-radius:2px;padding:14px;font-size:20px;color:#3A3733"><option>Toutes les familles</option><option>Sièges et tertiaire</option><option>Réseaux d'agences</option><option>Hôtellerie et loisirs</option></select>
+        <select style="background:#F8F5EE;border:1px solid rgba(58,55,51,.35);border-radius:2px;padding:14px;font-size:20px;color:#3A3733"><option>Tous les statuts</option><option>Publié</option><option>Brouillon</option></select>
+      </div>
+      <div style="padding:0 32px 64px">
+        <div data-r="table" style="display:grid;grid-template-columns:2.4fr 1.4fr 1fr 1fr 0.9fr;gap:24px;border-bottom:1px solid rgba(58,55,51,.3);padding:20px 0">
+          <span style="font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E">Projet</span>
+          <span style="font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E">Famille</span>
+          <span style="font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E">Ville</span>
+          <span style="font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E">Images</span>
+          <span style="font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E">État</span>
+        </div>
+        <sc-for list="{{ fiches }}" as="p" hint-placeholder-count="16">
+          <button data-r="table" onClick="{{ goEditeur }}" style="width:100%;text-align:left;background:transparent;border:none;border-bottom:1px solid rgba(58,55,51,.14);padding:22px 0;display:grid;grid-template-columns:2.4fr 1.4fr 1fr 1fr 0.9fr;gap:24px;align-items:center">
+            <span style="font-size:20px;font-weight:500;color:#3A3733">{{ p.t }}</span>
+            <span style="font-size:19px;color:#655B4E">{{ p.f }}</span>
+            <span style="font-size:19px;color:#655B4E">{{ p.v }}</span>
+            <span style="font-size:19px;color:#655B4E">{{ p.im }}</span>
+            <span style="{{ p.etatStyle }}">{{ p.etat }}</span>
+          </button>
+        </sc-for>
+      </div>
+    </section>
+    </sc-if>
+
+    <sc-if value="{{ isEditeur }}" hint-placeholder-val="{{ false }}">
+    <section data-screen-label="Admin, éditeur de projet" style="display:block">
+      <header data-r="row" style="border-bottom:1px solid rgba(58,55,51,.14);padding:40px 32px;display:flex;justify-content:space-between;align-items:flex-end;gap:32px">
+        <div>
+          <button onClick="{{ goListe }}" style="background:transparent;border:none;padding:0;font-size:19px;color:#655B4E;border-bottom:1px solid rgba(58,55,51,.3)">Retour aux projets</button>
+          <h1 style="margin:18px 0 0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-weight:600;font-size:52px;line-height:1.05;font-stretch:118%;letter-spacing:-.02em">Requalification urbaine de Ouidah</h1>
+          <p style="margin:14px 0 0;font-size:19px;color:#655B4E">Dernière modification il y a deux heures, par Armel ADIGOUN</p>
+        </div>
+        <div style="display:flex;gap:12px;flex:0 0 auto">
+          <button style="background:transparent;border:1px solid rgba(58,55,51,.4);color:#3A3733;border-radius:2px;padding:15px 22px;font-size:20px;font-weight:500">Aperçu</button>
+          <button style="background:#3A3733;color:#EFEAE1;border:none;border-radius:2px;padding:15px 24px;font-size:20px;font-weight:500;border-bottom:2px solid #A8842B">Publier</button>
+        </div>
+      </header>
+
+      <div style="display:flex;gap:32px;padding:0 32px;border-bottom:1px solid rgba(58,55,51,.14)">
+        <button onClick="{{ ongletCartouche }}" style="{{ sCartouche }}">Cartouche</button>
+        <button onClick="{{ ongletGalerie }}" style="{{ sGalerie }}">Galerie</button>
+        <button onClick="{{ ongletCompos }}" style="{{ sCompos }}">Composantes</button>
+      </div>
+
+      <sc-if value="{{ ongCartouche }}" hint-placeholder-val="{{ true }}">
+      <div data-r="editor" style="padding:32px;display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:48px;align-items:start">
+        <div data-r="two" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px">
+          <label style="display:block;grid-column:1/3"><span style="display:block;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E;margin-bottom:10px">Titre du projet</span><input type="text" value="Requalification urbaine de Ouidah" style="width:100%;background:#F8F5EE;border:1px solid rgba(58,55,51,.35);border-radius:2px;padding:15px;font-size:20px;color:#3A3733"></label>
+          <label style="display:block;grid-column:1/3"><span style="display:block;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E;margin-bottom:10px">Description</span><textarea rows="3" style="width:100%;background:#F8F5EE;border:1px solid rgba(58,55,51,.35);border-radius:2px;padding:15px;font-size:20px;line-height:1.6;color:#3A3733;resize:vertical">Requalification du centre historique et du bord de lagune : espaces publics, mobilier, éclairage et réseaux.</textarea></label>
+          <label style="display:block"><span style="display:block;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E;margin-bottom:10px">Maître d'ouvrage</span><input type="text" value="Maîtrise d'ouvrage publique, ville de Ouidah" style="width:100%;background:#F8F5EE;border:1px solid rgba(58,55,51,.35);border-radius:2px;padding:15px;font-size:20px;color:#3A3733"></label>
+          <label style="display:block"><span style="display:block;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E;margin-bottom:10px">Mission</span><input type="text" value="Maîtrise d'œuvre complète" style="width:100%;background:#F8F5EE;border:1px solid rgba(58,55,51,.35);border-radius:2px;padding:15px;font-size:20px;color:#3A3733"></label>
+          <label style="display:block;grid-column:1/3"><span style="display:block;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E;margin-bottom:10px">Étendue de la mission</span><textarea rows="3" style="width:100%;background:#F8F5EE;border:1px solid rgba(58,55,51,.35);border-radius:2px;padding:15px;font-size:20px;line-height:1.6;color:#3A3733;resize:vertical">Études, dossiers de consultation, direction de l'exécution, ordonnancement et coordination des cinq composantes.</textarea></label>
+          <label style="display:block"><span style="display:block;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E;margin-bottom:10px">Famille</span><select style="width:100%;background:#F8F5EE;border:1px solid rgba(58,55,51,.35);border-radius:2px;padding:15px;font-size:20px;color:#3A3733"><option>Requalification urbaine</option><option>Sièges et tertiaire</option><option>Réseaux d'agences</option></select></label>
+          <label style="display:block"><span style="display:block;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E;margin-bottom:10px">Statut</span><select style="width:100%;background:#F8F5EE;border:1px solid rgba(58,55,51,.35);border-radius:2px;padding:15px;font-size:20px;color:#3A3733"><option>Livré</option><option>En chantier</option><option>Concours lauréat</option><option>Étude</option></select></label>
+          <label style="display:block"><span style="display:block;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E;margin-bottom:10px">Ville rattachée à la carte</span><select style="width:100%;background:#F8F5EE;border:1px solid rgba(58,55,51,.35);border-radius:2px;padding:15px;font-size:20px;color:#3A3733"><option>Ouidah</option><option>Cotonou</option><option>Parakou</option><option>Malanville</option></select></label>
+          <label style="display:block"><span style="display:block;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E;margin-bottom:10px">Mis en avant sur l'accueil</span><select style="width:100%;background:#F8F5EE;border:1px solid rgba(58,55,51,.35);border-radius:2px;padding:15px;font-size:20px;color:#3A3733"><option>Oui, position 1</option><option>Oui, position 2</option><option>Non</option></select></label>
+        </div>
+        <div style="background:#E3DCD0;border:1px solid rgba(58,55,51,.14);padding:24px">
+          <p style="margin:0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E">Contrôles avant publication</p>
+          <div style="display:flex;flex-direction:column;gap:14px;margin-top:20px">
+            <p style="margin:0;font-size:19px;color:#3A3733">Cartouche complet, quatre champs renseignés</p>
+            <p style="margin:0;font-size:19px;color:#3A3733">Image de couverture définie</p>
+            <p style="margin:0;font-size:19px;color:#75590F">Cinq composantes documentées, toutes avec image</p>
+            <p style="margin:0;font-size:19px;color:#75590F">Texte alternatif manquant sur une image</p>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ ongGalerie }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:48px">
+        <div data-r="row" style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid rgba(58,55,51,.14);padding-bottom:16px">
+          <p style="margin:0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E">Sept images. Glissez pour réordonner.</p>
+          <button style="background:transparent;border:1px solid rgba(58,55,51,.4);color:#3A3733;border-radius:2px;padding:13px 20px;font-size:19px;font-weight:500">Verser des fichiers</button>
+        </div>
+        <div data-r="four" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin-top:32px">
+          <sc-for list="{{ galerie }}" as="g" hint-placeholder-count="4">
+            <div>
+              <div style="position:relative;overflow:hidden;background:#E3DCD0;border:1px solid rgba(58,55,51,.14)">
+                <img loading="lazy" src="{{ g.src }}" alt="{{ g.alt }}" style="width:100%;aspect-ratio:3/2;object-fit:cover;display:block">
+                <span style="position:absolute;left:10px;top:10px;background:#EFEAE1;color:#3A3733;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;padding:4px 10px">{{ g.n }}</span>
+              </div>
+              <input type="text" value="{{ g.alt }}" placeholder="Texte alternatif" style="width:100%;margin-top:12px;background:#F8F5EE;border:1px solid rgba(58,55,51,.35);border-radius:2px;padding:12px;font-size:19px;color:#3A3733">
+              <div style="display:flex;gap:10px;margin-top:10px">
+                <button style="background:transparent;border:1px solid rgba(58,55,51,.3);color:#655B4E;border-radius:2px;padding:9px 14px;font-size:19px">Couverture</button>
+                <button style="background:transparent;border:1px solid rgba(58,55,51,.3);color:#655B4E;border-radius:2px;padding:9px 14px;font-size:19px">Retirer</button>
+              </div>
+            </div>
+          </sc-for>
+          <div style="border:1px dashed rgba(58,55,51,.35);aspect-ratio:3/2;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px">
+            <span style="font-size:19px;color:#655B4E">Déposez ici<br>JPEG ou PNG, 2400 px de large au minimum</span>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ ongCompos }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:48px">
+        <div data-r="row" style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid rgba(58,55,51,.14);padding-bottom:16px">
+          <p style="margin:0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E">Cinq composantes. Une villa peut n'en avoir aucune.</p>
+          <button style="background:#3A3733;color:#EFEAE1;border:none;border-radius:2px;padding:13px 20px;font-size:19px;font-weight:500;border-bottom:2px solid #A8842B">Ajouter une composante</button>
+        </div>
+        <sc-for list="{{ compos }}" as="c" hint-placeholder-count="5">
+          <div data-r="compo" style="border-bottom:1px solid rgba(58,55,51,.14);padding:28px 0;display:grid;grid-template-columns:72px minmax(0,1fr) 200px;gap:24px;align-items:start">
+            <span style="font-family:Anybody,'IBM Plex Sans',sans-serif;font-weight:600;font-size:34px;font-stretch:118%;color:#75590F">{{ c.n }}</span>
+            <div>
+              <input type="text" value="{{ c.t }}" style="width:100%;background:#F8F5EE;border:1px solid rgba(58,55,51,.35);border-radius:2px;padding:14px;font-size:20px;font-weight:500;color:#3A3733">
+              <textarea rows="3" style="width:100%;margin-top:12px;background:#F8F5EE;border:1px solid rgba(58,55,51,.35);border-radius:2px;padding:14px;font-size:19px;line-height:1.6;color:#3A3733;resize:vertical">{{ c.txt }}</textarea>
+            </div>
+            <div>
+              <p style="margin:0;font-size:19px;color:#655B4E">{{ c.etat }}</p>
+              <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px">
+                <button style="background:transparent;border:1px solid rgba(58,55,51,.3);color:#3A3733;border-radius:2px;padding:11px 14px;font-size:19px">Gérer les images</button>
+                <button style="background:transparent;border:1px solid rgba(58,55,51,.3);color:#655B4E;border-radius:2px;padding:11px 14px;font-size:19px">Supprimer</button>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      </sc-if>
+    </section>
+    </sc-if>
+
+    <sc-if value="{{ isBoite }}" hint-placeholder-val="{{ false }}">
+    <section data-screen-label="Admin, demandes de contact" style="display:block">
+      <header style="border-bottom:1px solid rgba(58,55,51,.14);padding:40px 32px">
+        <p style="margin:0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E">Demandes de contact</p>
+        <h1 style="margin:16px 0 0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-weight:600;font-size:52px;line-height:1.05;font-stretch:118%;letter-spacing:-.02em">Quatre demandes, dont une de plus de deux jours</h1>
+      </header>
+      <div data-r="detail" style="display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);align-items:start">
+        <div data-r="list" style="border-right:1px solid rgba(58,55,51,.14);min-height:70vh">
+          <sc-for list="{{ demandes }}" as="d" hint-placeholder-count="4">
+            <button onClick="{{ d.pick }}" style="{{ d.style }}">
+              <span data-r="row" style="display:flex;justify-content:space-between;gap:12px;align-items:baseline">
+                <span style="font-size:20px;font-weight:500;color:#3A3733">{{ d.qui }}</span>
+                <span style="font-size:19px;color:#655B4E">{{ d.quand }}</span>
+              </span>
+              <span style="display:block;margin-top:8px;font-size:19px;color:#655B4E">{{ d.objet }}</span>
+              <span style="display:block;margin-top:10px;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#75590F">{{ d.etat }}</span>
+            </button>
+          </sc-for>
+        </div>
+        <div style="padding:40px 32px">
+          <div data-r="row" style="display:flex;justify-content:space-between;align-items:flex-start;gap:32px">
+            <div>
+              <h2 style="margin:0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-weight:600;font-size:34px;line-height:1.1;font-stretch:118%;letter-spacing:-.02em">{{ courant.qui }}</h2>
+              <p style="margin:12px 0 0;font-size:20px;color:#655B4E">{{ courant.contact }}</p>
+            </div>
+            <div style="display:flex;gap:12px;flex:0 0 auto">
+              <button style="background:transparent;border:1px solid rgba(58,55,51,.4);color:#3A3733;border-radius:2px;padding:13px 20px;font-size:19px;font-weight:500">Marquer traitée</button>
+              <button style="background:#3A3733;color:#EFEAE1;border:none;border-radius:2px;padding:13px 20px;font-size:19px;font-weight:500;border-bottom:2px solid #A8842B">Répondre</button>
+            </div>
+          </div>
+          <div data-r="three" style="margin-top:40px;background:#E3DCD0;border:1px solid rgba(58,55,51,.14);padding:28px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px">
+            <div><p style="margin:0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E">Famille</p><p style="margin:10px 0 0;font-size:20px;color:#3A3733">{{ courant.famille }}</p></div>
+            <div><p style="margin:0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E">Mission</p><p style="margin:10px 0 0;font-size:20px;color:#3A3733">{{ courant.mission }}</p></div>
+            <div><p style="margin:0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E">Sites</p><p style="margin:10px 0 0;font-size:20px;color:#3A3733">{{ courant.sites }}</p></div>
+            <div><p style="margin:0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E">Villes</p><p style="margin:10px 0 0;font-size:20px;color:#3A3733">{{ courant.villes }}</p></div>
+            <div><p style="margin:0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E">Foncier</p><p style="margin:10px 0 0;font-size:20px;color:#3A3733">{{ courant.foncier }}</p></div>
+            <div><p style="margin:0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E">Procédure</p><p style="margin:10px 0 0;font-size:20px;color:#3A3733">{{ courant.procedure }}</p></div>
+          </div>
+          <div style="margin-top:40px">
+            <p style="margin:0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E">Programme transmis</p>
+            <p style="margin:16px 0 0;max-width:68ch;font-size:20px;line-height:1.75;color:#3A3733">{{ courant.message }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    </sc-if>
+
+  </main>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440}}">
+class Component extends DCLogic {
+  state = { ecran: 'bord', onglet: 'cartouche', sel: 0 };
+
+  fiches = [
+    { t: 'Requalification urbaine de Ouidah', f: 'Requalification urbaine', v: 'Ouidah', im: '7 images', etat: 'Publié' },
+    { t: 'Siège de la BRVM', f: 'Sièges et tertiaire', v: 'Cotonou', im: '2 images', etat: 'Publié' },
+    { t: 'Hôtel Sofitel', f: 'Hôtellerie et loisirs', v: 'Cotonou', im: '5 images', etat: 'Publié' },
+    { t: 'Cove Beach Hotel', f: 'Hôtellerie et loisirs', v: 'Avlékété', im: '5 images', etat: 'Publié' },
+    { t: "Rénovation de l'hôtel Azalaï", f: 'Hôtellerie et loisirs', v: 'Cotonou', im: '4 images', etat: 'Publié' },
+    { t: "Club Med d'Avlékété", f: 'Hôtellerie et loisirs', v: 'Avlékété', im: '5 images', etat: 'Publié' },
+    { t: "Golf Club d'Avlékété", f: 'Équipements et culture', v: 'Avlékété', im: '4 images', etat: 'Publié' },
+    { t: 'Logements sociaux de Glo-Djigbé', f: 'Logement social et habitat', v: 'Glo-Djigbé', im: '4 images', etat: 'Publié' },
+    { t: "Réseau d'agences BIIC", f: "Réseaux d'agences", v: 'Douze villes', im: '5 images', etat: 'Publié' },
+    { t: "Réseau d'agences Celtiis", f: "Réseaux d'agences", v: 'Dix villes', im: '5 images', etat: 'Publié' },
+    { t: 'Réseau de bureaux de La Poste', f: "Réseaux d'agences", v: 'Huit villes', im: '5 images', etat: 'Publié' },
+    { t: 'Siège du Groupe SFP', f: 'Sièges et tertiaire', v: 'Cotonou', im: '5 images', etat: 'Publié' },
+    { t: "Siège Dave's Expertise", f: 'Sièges et tertiaire', v: 'Cotonou', im: '2 images', etat: 'Publié' },
+    { t: 'Immeuble Al Manar', f: 'Sièges et tertiaire', v: 'Cotonou', im: '2 images', etat: 'Publié' },
+    { t: 'Siège ASA-Bénin', f: 'Sièges et tertiaire', v: 'Cotonou', im: 'Aucune', etat: 'Brouillon' },
+    { t: 'Villas et résidences', f: 'Villas et résidences', v: 'Cotonou, Abomey-Calavi', im: '1 image', etat: 'Publié' }
+  ];
+
+  aFaire = [
+    { t: 'Siège ASA-Bénin', quoi: 'Aucune image versée, la fiche reste au registre filaire', badge: 'Brouillon' },
+    { t: "Réseau d'agences BIIC", quoi: 'Cartouche incomplet, étendue de la mission manquante', badge: 'Publié' },
+    { t: 'Villas et résidences', quoi: 'Une seule image, la galerie mérite trois vues supplémentaires', badge: 'Publié' },
+    { t: 'Requalification urbaine de Ouidah', quoi: 'Texte alternatif manquant sur une image', badge: 'Publié' }
+  ];
+
+  demandes = [
+    { qui: 'Direction du patrimoine, BIIC', quand: 'Il y a 3 jours', objet: 'Six nouvelles agences en 2027', etat: 'Non traitée, plus de deux jours', contact: 'patrimoine@biic.bj, +229 00 00 00 00', famille: "Réseaux d'agences", mission: 'Mission complète', sites: 'Six à quinze sites', villes: 'Parakou, Kandi, Nikki, Djougou, Tanguiéta, Malanville', foncier: 'Terrains acquis', procedure: "Appel d'offres", message: "Nous préparons l'extension du réseau vers le nord du pays. Six agences sont programmées pour 2027, sur des terrains déjà acquis. Nous souhaitons reprendre le gabarit existant en l'adaptant aux amplitudes thermiques du nord et à la logistique de chantier plus longue. Merci de nous indiquer vos disponibilités pour un premier échange." },
+    { qui: "Cabinet du maire, ville d'Abomey", quand: 'Hier', objet: 'Requalification du centre historique', etat: 'Non traitée', contact: 'cabinet@abomey.bj', famille: 'Requalification urbaine', mission: 'Étude de faisabilité', sites: 'Un seul site', villes: 'Abomey', foncier: 'Bâti existant à reprendre', procedure: 'Non déterminée', message: "Nous avons vu le travail conduit à Ouidah. Nous souhaitons une étude de faisabilité sur le périmètre du centre historique, avec une première estimation des coûts par composante." },
+    { qui: 'Société hôtelière, littoral', quand: 'Hier', objet: 'Extension de cinquante clés à Avlékété', etat: 'Non traitée', contact: 'direction@hotellerie-littoral.bj', famille: 'Hôtellerie et loisirs', mission: 'Conception seule', sites: 'Un seul site', villes: 'Avlékété', foncier: 'Terrain acquis', procedure: 'Gré à gré', message: "Extension de cinquante clés sur un site voisin de vos réalisations. Nous cherchons une conception seule, le suivi étant assuré par notre maîtrise d'ouvrage déléguée." },
+    { qui: 'Particulier, Abomey-Calavi', quand: "Aujourd'hui", objet: 'Villa sur parcelle de huit cents mètres carrés', etat: 'Non traitée', contact: 'demande@courriel.bj', famille: 'Villas et résidences', mission: 'Mission complète', sites: 'Un seul site', villes: 'Abomey-Calavi', foncier: "En cours d'acquisition", procedure: 'Gré à gré', message: "Parcelle de huit cents mètres carrés, orientation est-ouest, en cours d'acquisition. Nous souhaitons vérifier la constructibilité avant de signer." }
+  ];
+
+  compos = [
+    { t: 'Le front lagunaire', txt: "Reprise du bord d'eau sur huit cents mètres : promenade continue, emmarchements vers la lagune, plantation d'alignement et reprise des eaux de ruissellement.", etat: '2 images' },
+    { t: 'La place du marché', txt: "Dégagement de la place, halle couverte en structure légère, sol drainant et redistribution des étals.", etat: '1 image' },
+    { t: "L'axe historique", txt: "Requalification de la voie et de ses abords : trottoirs élargis, stationnement organisé, éclairage repris, signalétique d'interprétation.", etat: '1 image' },
+    { t: 'Le mobilier urbain', txt: "Famille de mobilier dessinée pour l'opération : bancs, corbeilles, potelets et abris, en béton préfabriqué et acier galvanisé.", etat: '1 image' },
+    { t: "Les réseaux et l'éclairage", txt: "Enfouissement partiel des réseaux, réseau d'eaux pluviales séparatif et éclairage public à deux niveaux.", etat: '2 images' }
+  ];
+
+  galerie = [
+    { src: 'assets/img/ouidah-01.jpg', alt: 'Le front lagunaire requalifié, promenade et plantation d\u2019alignement' },
+    { src: 'assets/img/ouidah-02.jpg', alt: 'La promenade du bord de lagune en fin de journée' },
+    { src: 'assets/img/ouidah-03.jpg', alt: 'La halle du marché et le sol drainant' },
+    { src: 'assets/img/ouidah-04.jpg', alt: "L'axe historique et ses trottoirs élargis" },
+    { src: 'assets/img/ouidah-05.jpg', alt: 'Le mobilier urbain dessiné pour l\u2019opération' },
+    { src: 'assets/img/ouidah-06.jpg', alt: "L'éclairage public à deux niveaux" },
+    { src: 'assets/img/ouidah-07.jpg', alt: '' }
+  ];
+
+  nav(actif) {
+    return actif
+      ? 'width:100%;text-align:left;background:#EFEAE1;border:none;border-left:2px solid #A8842B;padding:14px 16px;font-size:20px;font-weight:500;color:#3A3733'
+      : 'width:100%;text-align:left;background:transparent;border:none;border-left:2px solid transparent;padding:14px 16px;font-size:20px;font-weight:500;color:#655B4E';
+  }
+  onglet(actif) {
+    return actif
+      ? 'background:transparent;border:none;padding:20px 0;font-family:Anybody, IBM Plex Sans, sans-serif;font-size:20px;font-weight:600;font-stretch:96%;letter-spacing:.03em;color:#3A3733;border-bottom:2px solid #A8842B'
+      : 'background:transparent;border:none;padding:20px 0;font-family:Anybody, IBM Plex Sans, sans-serif;font-size:20px;font-weight:600;font-stretch:96%;letter-spacing:.03em;color:#655B4E;border-bottom:2px solid transparent';
+  }
+
+  renderVals() {
+    const s = this.state;
+    const go = (e) => (ev) => { if (ev) ev.preventDefault(); this.setState({ ecran: e }); window.scrollTo(0, 0); };
+    return {
+      isBord: s.ecran === 'bord', isListe: s.ecran === 'liste', isEditeur: s.ecran === 'editeur', isBoite: s.ecran === 'boite',
+      goBord: go('bord'), goListe: go('liste'), goEditeur: go('editeur'), goBoite: go('boite'),
+      sBord: this.nav(s.ecran === 'bord'), sListe: this.nav(s.ecran === 'liste'),
+      sEditeur: this.nav(s.ecran === 'editeur'), sBoite: this.nav(s.ecran === 'boite'),
+      ongCartouche: s.onglet === 'cartouche', ongGalerie: s.onglet === 'galerie', ongCompos: s.onglet === 'compos',
+      ongletCartouche: () => this.setState({ onglet: 'cartouche' }),
+      ongletGalerie: () => this.setState({ onglet: 'galerie' }),
+      ongletCompos: () => this.setState({ onglet: 'compos' }),
+      sCartouche: this.onglet(s.onglet === 'cartouche'), sGalerie: this.onglet(s.onglet === 'galerie'),
+      sCompos: this.onglet(s.onglet === 'compos'),
+      aFaire: this.aFaire,
+      recentes: this.demandes.map(d => ({ qui: d.qui, objet: d.objet, quand: d.quand })),
+      fiches: this.fiches.map(p => ({
+        t: p.t, f: p.f, v: p.v, im: p.im, etat: p.etat,
+        etatStyle: p.etat === 'Publié'
+          ? 'font-family:Anybody, IBM Plex Sans, sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#3A3733'
+          : 'font-family:Anybody, IBM Plex Sans, sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#75590F'
+      })),
+      compos: this.compos.map((c, i) => ({ n: String(i + 1).padStart(2, '0'), t: c.t, txt: c.txt, etat: c.etat })),
+      galerie: this.galerie.map((g, i) => ({ src: g.src, alt: g.alt, n: String(i + 1).padStart(2, '0') })),
+      demandes: this.demandes.map((d, i) => ({
+        qui: d.qui, objet: d.objet, quand: d.quand, etat: d.etat,
+        pick: () => this.setState({ sel: i }),
+        style: (s.sel === i
+          ? 'width:100%;text-align:left;background:#E3DCD0;border:none;border-left:2px solid #A8842B;'
+          : 'width:100%;text-align:left;background:transparent;border:none;border-left:2px solid transparent;')
+          + 'border-bottom:1px solid rgba(58,55,51,.14);padding:24px 28px;display:block'
+      })),
+      courant: this.demandes[s.sel]
+    };
+  }
+}
+
+</script>
+</body>
+</html>

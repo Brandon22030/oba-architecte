@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,100..900&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#E3DCD0;color:#3A3733;font-family:'IBM Plex Sans',sans-serif;-webkit-font-smoothing:antialiased;line-height:1.55;font-variant-numeric:tabular-nums}
+  a{color:#3A3733;text-decoration:none}
+  a:hover{color:#75590F}
+  button{font-family:inherit;cursor:pointer}
+</style>
+</helmet>
+
+<header style="padding:40px 32px 28px;border-bottom:1px solid rgba(58,55,51,.18)">
+  <p style="margin:0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;color:#655B4E">Maquettes responsives</p>
+  <h1 style="margin:14px 0 0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-weight:600;font-size:clamp(32px,3.4vw,52px);line-height:1.06;font-stretch:118%;letter-spacing:-.02em">Le site aux trois largeurs de référence.</h1>
+  <p style="margin:20px 0 0;max-width:80ch;font-size:20px;line-height:1.7;color:#3A3733">Chaque cadre affiche le site réel, à sa largeur, entièrement navigable. Le mobile et la tablette ne sont pas des fichiers distincts : ce sont les paliers de la même maquette, à 1024, 900 et 760 pixels. Choisissez une page, elle s'ouvre dans les trois cadres.</p>
+  <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:28px">
+    <sc-for list="{{ pages }}" as="p" hint-placeholder-count="6">
+      <button onClick="{{ p.pick }}" style="{{ p.style }}">{{ p.nom }}</button>
+    </sc-for>
+  </div>
+</header>
+
+<main style="padding:40px 32px 80px;display:flex;flex-wrap:wrap;gap:40px;align-items:flex-start">
+  <section style="flex:0 0 auto">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:14px">
+      <p style="margin:0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em">Mobile</p>
+      <p style="margin:0;font-size:19px;color:#655B4E">390 &times; 844</p>
+    </div>
+    <div style="width:390px;height:844px;border:1px solid #3A3733;background:#EFEAE1;overflow:hidden">
+      <iframe src="{{ url }}" title="Site OBA en 390 pixels" style="width:390px;height:844px;border:0;display:block"></iframe>
+    </div>
+    <p style="margin:14px 0 0;max-width:390px;font-size:19px;line-height:1.6;color:#655B4E">Une seule colonne, marges de 24 pixels, navigation dans le menu plein écran, cibles de 44 pixels.</p>
+  </section>
+
+  <section style="flex:0 0 auto">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:14px">
+      <p style="margin:0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em">Tablette</p>
+      <p style="margin:0;font-size:19px;color:#655B4E">834 &times; 1112</p>
+    </div>
+    <div style="width:834px;height:1112px;border:1px solid #3A3733;background:#EFEAE1;overflow:hidden">
+      <iframe src="{{ url }}" title="Site OBA en 834 pixels" style="width:834px;height:1112px;border:0;display:block"></iframe>
+    </div>
+    <p style="margin:14px 0 0;max-width:834px;font-size:19px;line-height:1.6;color:#655B4E">La grille à douze colonnes se replie, les blocs collants se figent, le menu plein écran remplace la barre de liens.</p>
+  </section>
+
+  <section style="flex:0 0 auto">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:14px">
+      <p style="margin:0;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em">Bureau</p>
+      <p style="margin:0;font-size:19px;color:#655B4E">1440 &times; 900</p>
+    </div>
+    <div style="width:1440px;height:900px;border:1px solid #3A3733;background:#EFEAE1;overflow:hidden">
+      <iframe src="{{ url }}" title="Site OBA en 1440 pixels" style="width:1440px;height:900px;border:0;display:block"></iframe>
+    </div>
+    <p style="margin:14px 0 0;max-width:1440px;font-size:19px;line-height:1.6;color:#655B4E">Grille complète, emprise maximale de 1680 pixels, marges de 40 pixels.</p>
+  </section>
+</main>
+
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="200" height="200" fill="#EFEAE1"/>
+    <rect x="60" y="60" width="80" height="80" fill="#6E6355"/>
+    <rect x="124" y="124" width="16" height="16" fill="#A8842B"/>
+  </svg>
+</template>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440}}">
+class Component extends DCLogic {
+  state = { page: 'accueil' };
+  liste = [
+    ['accueil', 'Accueil'], ['territoire', 'Territoire'], ['projets', 'Index projets'],
+    ['projet', 'Fiche projet'], ['journal', 'Journal'], ['contact', 'Contact']
+  ];
+  renderVals() {
+    const s = this.state;
+    return {
+      url: 'index.html' + '#' + s.page,
+      pages: this.liste.map(([id, nom]) => ({
+        nom: nom,
+        pick: () => this.setState({ page: id }),
+        style: (s.page === id
+          ? 'background:#3A3733;color:#F8F5EE;border:1px solid #3A3733;'
+          : 'background:transparent;color:#3A3733;border:1px solid rgba(58,55,51,.4);')
+          + "border-radius:2px;padding:10px 16px;font-family:Anybody,'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;font-stretch:96%;letter-spacing:.04em;min-height:44px"
+      }))
+    };
+  }
+}
+
+</script>
+</body>
+</html>

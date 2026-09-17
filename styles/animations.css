@@ -1,0 +1,145 @@
+/* Keyframes ported verbatim from site/index.html */
+
+@keyframes obaLineIn {
+  from {
+    transform: translateY(120%) rotate(3deg);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) rotate(0);
+    opacity: 1;
+  }
+}
+/* Intro progress bar fill (components/site/IntroController.tsx) */
+@keyframes obaBarre {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes obaWdth {
+  0%,
+  100% {
+    font-variation-settings: "wdth" 68, "wght" 700;
+  }
+  50% {
+    font-variation-settings: "wdth" 94, "wght" 700;
+  }
+}
+@keyframes obaSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes obaSpinRev {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+@keyframes obaOrbit {
+  to {
+    transform: rotate(360deg) translateX(var(--r, 180px)) rotate(-360deg);
+  }
+}
+@keyframes obaFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotateX(0) rotateY(0);
+  }
+  50% {
+    transform: translate3d(0, -26px, 0) rotateX(18deg) rotateY(24deg);
+  }
+}
+@keyframes obaMarquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes obaMarqueeRev {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes obaScan {
+  to {
+    transform: translateY(100vh);
+  }
+}
+@keyframes obaBlink {
+  0%,
+  60% {
+    opacity: 1;
+  }
+  61%,
+  100% {
+    opacity: 0.25;
+  }
+}
+@keyframes obaDrop {
+  to {
+    transform: translateY(14px);
+    opacity: 0.2;
+  }
+}
+@keyframes obaGridPan {
+  to {
+    background-position: 0 -140px, 0 -140px;
+  }
+}
+@keyframes obaRadar {
+  from {
+    transform: translateX(-40%);
+  }
+  to {
+    transform: translateX(240%);
+  }
+}
+@keyframes obaPulse {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+/* 404 page (app/not-found.tsx) */
+@keyframes obaUp {
+  from {
+    transform: translateY(105%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes obaFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes obaRule {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes obaBlip {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}

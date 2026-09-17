@@ -1,0 +1,33 @@
+/* Design tokens ported verbatim from site/index.html (dark = default, "clair" = light theme). */
+
+:root {
+  --ac: #ef8b12;
+  --nk: #100f0c;
+  --nk2: #0b0a08;
+  --nk3: #16150f;
+  --pl: #efeae1;
+  --nkr: 16, 15, 12;
+  --nk2r: 11, 10, 8;
+  --plr: 239, 234, 225;
+  --li: 1;
+  --tglx: 0px;
+
+  /* runtime-driven (mouse/scroll), written to <html> by hooks/useParallax */
+  --mx: 0;
+  --my: 0;
+  --sy: 0;
+  --prog: 0;
+}
+
+html[data-oba-t="clair"] {
+  --ac: #a34a00;
+  --nk: #efeae1;
+  --nk2: #e3dbce;
+  --nk3: #e9e2d6;
+  --pl: #171410;
+  --nkr: 239, 234, 225;
+  --nk2r: 227, 219, 206;
+  --plr: 23, 20, 16;
+  --li: 0;
+  --tglx: 20px;
+}
