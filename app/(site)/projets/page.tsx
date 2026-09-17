@@ -1,8 +1,12 @@
-import type { Metadata } from "next";
 import { getPublishedProjects } from "@/lib/data/projects";
+import { pageMetadata } from "@/lib/site";
 import { ProjetsClient } from "./ProjetsClient";
 
-export const metadata: Metadata = { title: "Projets — OBA Architectes Firm" };
+export const metadata = pageMetadata({
+  title: "Projets",
+  description:
+    "Réalisations OBA Architectes Firm : architecture, architecture intérieure, paysagisme et urbanisme au Bénin, en Côte d'Ivoire et en Afrique de l'Ouest.",
+});
 export const dynamic = "force-dynamic";
 
 export default async function ProjetsPage() {

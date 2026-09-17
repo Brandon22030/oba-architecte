@@ -1,9 +1,13 @@
-import type { Metadata } from "next";
 import { BeninMap } from "@/components/site/BeninMap";
 import { Reveal } from "@/components/site/Reveal";
 import { getVillesAvecProjets } from "@/lib/data/villes";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = { title: "Territoire — OBA Architectes Firm" };
+export const metadata = pageMetadata({
+  title: "Territoire",
+  description:
+    "OBA Architectes Firm intervient au Bénin, en Côte d'Ivoire, au Togo, au Ghana et au Congo — cabinet basé à Cotonou, né à Abidjan en 2012.",
+});
 export const dynamic = "force-dynamic";
 
 const STATS = [

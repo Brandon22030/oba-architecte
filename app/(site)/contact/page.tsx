@@ -1,9 +1,12 @@
-import type { Metadata } from "next";
 import { ZoomImage } from "@/components/site/ZoomImage";
 import { getSiteSettings } from "@/lib/data/settings";
+import { pageMetadata } from "@/lib/site";
 import { ContactForm } from "./ContactForm";
 
-export const metadata: Metadata = { title: "Contact — OBA Architectes Firm" };
+export const metadata = pageMetadata({
+  title: "Contact",
+  description: "Contactez OBA Architectes Firm à Cotonou, Bénin, pour parler de votre projet d'architecture.",
+});
 export const dynamic = "force-dynamic";
 
 export default async function ContactPage() {

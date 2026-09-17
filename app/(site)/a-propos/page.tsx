@@ -4,7 +4,13 @@ import { PortraitSlot } from "@/components/site/PortraitSlot";
 import { Reveal } from "@/components/site/Reveal";
 import { ZoomImage } from "@/components/site/ZoomImage";
 import { getTeam } from "@/lib/data/team";
+import { pageMetadata } from "@/lib/site";
 
+export const metadata = pageMetadata({
+  title: "À propos",
+  description:
+    "L'équipe OBA Architectes Firm : architecture, urbanisme, paysagisme et suivi de projets, depuis Cotonou pour le Bénin, la Côte d'Ivoire et l'Afrique de l'Ouest.",
+});
 export const dynamic = "force-dynamic";
 
 const COMPETENCES = ["Architecture", "Urbanisme", "Paysagisme", "Suivi de projets"];

@@ -6,13 +6,21 @@ import { Magnetic } from "@/components/site/Magnetic";
 import { Reveal } from "@/components/site/Reveal";
 import { ZoomImage } from "@/components/site/ZoomImage";
 import { getProjectBySlug, projectDisplayText } from "@/lib/data/projects";
+import { pageMetadata, SITE_URL } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata(props: PageProps<"/projets/[slug]">): Promise<Metadata> {
   const { slug } = await props.params;
   const project = await getProjectBySlug(slug);
-  return { title: project ? `${project.title} — OBA Architectes Firm` : "Projet" };
+  if (!project) return { title: "Projet" };
+
+  const { chapo } = projectDisplayText(project);
+  return pageMetadata({
+    title: project.title,
+    description: chapo,
+    images: project.coverImageUrl ? [project.coverImageUrl] : undefined,
+  });
 }
 
 export default async function ProjetPage(props: PageProps<"/projets/[slug]">) {
@@ -24,8 +32,19 @@ export default async function ProjetPage(props: PageProps<"/projets/[slug]">) {
   const gallery = project.gallery;
   const { chapo, description, isDemo } = projectDisplayText(project);
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Accueil", item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: "Projets", item: `${SITE_URL}/projets` },
+      { "@type": "ListItem", position: 3, name: project.title, item: `${SITE_URL}/projets/${project.slug}` },
+    ],
+  };
+
   return (
     <div>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       <section className="mx-auto max-w-[1760px] px-10 pt-[clamp(90px,11vw,140px)] pb-[clamp(28px,3vw,40px)] max-[640px]:px-5 max-[1400px]:px-8">
         <Magnetic>
           <Link
