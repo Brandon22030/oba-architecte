@@ -10,16 +10,6 @@ export default function NotFound() {
     <div className="relative grid min-h-screen overflow-hidden" style={{ background: "var(--nk)", color: "var(--pl)" }}>
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(var(--plr),.05) 1px, transparent 1px), linear-gradient(90deg, rgba(var(--plr),.05) 1px, transparent 1px)",
-          backgroundSize: "140px 140px",
-          animation: "obaGridPan 12s linear infinite",
-        }}
-      />
-      <div
-        aria-hidden="true"
         className="pointer-events-none absolute rounded-full"
         style={{
           right: "-12vw",

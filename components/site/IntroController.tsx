@@ -139,13 +139,6 @@ export function IntroController() {
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage: "repeating-linear-gradient(to right, rgba(var(--plr),.13) 0 1px, transparent 1px 12.5%)",
-        }}
-      />
-      <div
-        aria-hidden="true"
         className="pointer-events-none absolute top-0 right-0 left-0 h-px"
         style={{ background: "rgba(var(--plr),.14)" }}
       />

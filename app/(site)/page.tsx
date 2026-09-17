@@ -33,16 +33,6 @@ export default async function AccueilPage() {
       <section className="relative flex min-h-[100svh] items-center overflow-hidden border-b" style={{ borderColor: "rgba(var(--plr),.1)" }}>
         <div
           aria-hidden="true"
-          className="absolute inset-0"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(var(--plr),.055) 1px, transparent 1px), linear-gradient(90deg, rgba(var(--plr),.055) 1px, transparent 1px)",
-            backgroundSize: "140px 140px",
-            animation: "obaGridPan 12s linear infinite",
-          }}
-        />
-        <div
-          aria-hidden="true"
           className="absolute top-1/2 left-1/2"
           style={{
             width: "min(76vw,900px)",
