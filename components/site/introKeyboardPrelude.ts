@@ -18,7 +18,14 @@
  * as public/assets/logo-oba-clair.png.
  */
 
-export const KEYBOARD_PRELUDE_DURATION = 6850;
+/** Slows the whole keyboard-to-logo sequence down — the client wants time to
+ * actually see the construction-guide traces before the logo settles. Every
+ * delay/duration in this module flows through `run()` below, so this one
+ * constant stretches the entire choreography uniformly without needing to
+ * hand-rework each timing value. */
+export const PRELUDE_SPEED = 1.4;
+
+export const KEYBOARD_PRELUDE_DURATION = 6850 * PRELUDE_SPEED;
 
 export type PreludeAnimate = (element: Element, frames: Keyframe[], options: KeyframeAnimationOptions) => Promise<void>;
 
@@ -182,7 +189,7 @@ export function mountKeyboardPrelude({
 
   const tasks: Promise<void>[] = [];
   const run = (element: Element, frames: Keyframe[], delay: number, duration: number, easing: string = EASE) => {
-    tasks.push(animate(element, frames, { delay, duration, easing, fill: "forwards" }));
+    tasks.push(animate(element, frames, { delay: delay * PRELUDE_SPEED, duration: duration * PRELUDE_SPEED, easing, fill: "forwards" }));
   };
 
   const rects = new Map([...board.querySelectorAll<HTMLDivElement>(".keyboard-key")].map((key) => [key, key.getBoundingClientRect()] as const));

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Logo } from "./Logo";
-import { KEYBOARD_PRELUDE_DURATION, mountKeyboardPrelude, type PreludeAnimate } from "./introKeyboardPrelude";
+import { KEYBOARD_PRELUDE_DURATION, mountKeyboardPrelude, PRELUDE_SPEED, type PreludeAnimate } from "./introKeyboardPrelude";
 
 /**
  * Full-screen splash intro, ported from the reference's [data-ii="voile"]
@@ -36,7 +36,9 @@ const LOGO = {
 };
 // The keyboard prelude forms the logo in place of a fade-in, so the logo's own
 // timeline is just pause + travel — but everything after it waits for the prelude too.
-const SETTLED = LOGO.pause + LOGO.travel;
+// Scaled by PRELUDE_SPEED to match introKeyboardPrelude.ts, which stretches these same
+// pause/travel values internally (passed through as-is, then scaled inside its own run()).
+const SETTLED = (LOGO.pause + LOGO.travel) * PRELUDE_SPEED;
 const BASE = KEYBOARD_PRELUDE_DURATION + SETTLED;
 
 // Content stagger (ms from mount). The skip button stays available almost
