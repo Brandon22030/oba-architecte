@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { updateProjectCartouche } from "@/app/admin/(dashboard)/projets/actions";
 import type { Project } from "@/lib/data/project-constants";
 import { Field, inputClass, primaryButtonClass } from "./ui";
@@ -71,6 +72,9 @@ export function CartoucheForm({ project, villes }: { project: Project; villes: {
             </option>
           ))}
         </select>
+        <Link href="/admin/villes" className="text-xs text-admin-accent hover:underline">
+          + Ajouter une nouvelle ville
+        </Link>
       </Field>
       <Field label="Libellé de ville affiché (si réseau multi-villes)">
         <input name="city_label" defaultValue={project.city} placeholder="ex. Dix villes" className={inputClass} />

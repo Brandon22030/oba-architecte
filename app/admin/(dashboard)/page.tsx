@@ -62,7 +62,9 @@ export default async function DashboardHomePage() {
       <div className="grid grid-cols-4 gap-6 max-[640px]:grid-cols-1 max-[860px]:grid-cols-2">
         <KpiTile value={publishedCount} label="Projets publiés" />
         <KpiTile value={missingCover.length} label="Fiches sans image de couverture" />
-        <KpiTile value={villesCount} label="Villes rattachées à la carte" />
+        <Link href="/admin/villes" className="hover:opacity-80">
+          <KpiTile value={villesCount} label="Villes rattachées à la carte" />
+        </Link>
         <KpiTile value={untreated} label="Demandes non traitées" />
       </div>
 

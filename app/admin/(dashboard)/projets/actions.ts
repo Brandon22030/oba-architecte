@@ -34,7 +34,15 @@ export async function createProject(formData: FormData) {
 
   const { data, error } = await supabase
     .from("projects")
-    .insert({ title, slug, category: "Tertiaire", famille: "Sièges et tertiaire", statut: "Étude", publie: false })
+    .insert({
+      title,
+      slug,
+      category: "Tertiaire",
+      famille: "Sièges et tertiaire",
+      statut: "Étude",
+      publie: false,
+      ville_id: field(formData, "ville_id"),
+    })
     .select("id")
     .single();
 
@@ -71,6 +79,33 @@ export async function updateProjectCartouche(projectId: string, formData: FormDa
 
   revalidatePath(`/admin/projets/${projectId}`);
   revalidatePath("/admin/projets");
+}
+
+/** Attach an existing project to a ville without touching its other fields (used from /admin/villes). */
+export async function attachProjectToVille(villeId: string, formData: FormData) {
+  const projectId = field(formData, "project_id");
+  if (!projectId) return;
+
+  const supabase = await createClient();
+  const { error } = await supabase.from("projects").update({ ville_id: villeId }).eq("id", projectId);
+  if (error) throw error;
+
+  revalidatePath(`/admin/projets/${projectId}`);
+  revalidatePath("/admin/projets");
+  revalidatePath("/admin/villes");
+  revalidatePath("/territoire");
+}
+
+/** Detach a project from its ville without touching its other fields (used from /admin/villes). */
+export async function detachProjectFromVille(projectId: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("projects").update({ ville_id: null }).eq("id", projectId);
+  if (error) throw error;
+
+  revalidatePath(`/admin/projets/${projectId}`);
+  revalidatePath("/admin/projets");
+  revalidatePath("/admin/villes");
+  revalidatePath("/territoire");
 }
 
 export async function togglePublish(projectId: string, publie: boolean) {
