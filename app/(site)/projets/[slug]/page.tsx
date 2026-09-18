@@ -87,8 +87,8 @@ export default async function ProjetPage(props: PageProps<"/projets/[slug]">) {
 
       <section className="mx-auto max-w-[1760px] px-10 py-[clamp(50px,6vw,84px)] max-[640px]:px-5 max-[1400px]:px-8">
         <div
-          className="grid gap-px max-[640px]:grid-cols-1 max-[860px]:grid-cols-2"
-          style={{ gridTemplateColumns: "repeat(4,minmax(0,1fr))", background: "rgba(var(--plr),.14)" }}
+          className="grid grid-cols-4 gap-px max-[640px]:grid-cols-1 max-[860px]:grid-cols-2"
+          style={{ background: "rgba(var(--plr),.14)" }}
         >
           {[
             { label: "Programme", value: project.category },
@@ -110,7 +110,7 @@ export default async function ProjetPage(props: PageProps<"/projets/[slug]">) {
           ))}
         </div>
 
-        <div className="mt-[clamp(40px,5vw,70px)] grid gap-[clamp(30px,4vw,72px)] max-[1100px]:grid-cols-1" style={{ gridTemplateColumns: "minmax(0,1fr) minmax(0,1fr)" }}>
+        <div className="mt-[clamp(40px,5vw,70px)] grid grid-cols-2 gap-[clamp(30px,4vw,72px)] max-[1100px]:grid-cols-1">
           <Reveal as="p" className="font-display m-0" style={{ fontSize: "clamp(24px,2.7vw,40px)", lineHeight: 1.2, fontVariationSettings: "'wdth' 80,'wght' 400" }}>
             {chapo}
           </Reveal>

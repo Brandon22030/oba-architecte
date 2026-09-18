@@ -46,7 +46,7 @@ export default async function ContactPage() {
       </section>
 
       <section className="mx-auto max-w-[1760px] px-10 py-[clamp(70px,9vw,130px)] max-[640px]:px-5 max-[1400px]:px-8">
-        <div className="grid items-start gap-[clamp(40px,6vw,100px)] max-[1100px]:grid-cols-1" style={{ gridTemplateColumns: "minmax(0,1.3fr) minmax(0,.7fr)" }}>
+        <div className="grid grid-cols-[minmax(0,1.3fr)_minmax(0,.7fr)] items-start gap-[clamp(40px,6vw,100px)] max-[1100px]:grid-cols-1">
           <ContactForm />
 
           <aside className="flex flex-col gap-8.5 font-mono text-[15px] leading-[1.7]" style={{ color: "var(--pl)" }}>

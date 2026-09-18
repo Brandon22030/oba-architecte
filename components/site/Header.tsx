@@ -24,7 +24,7 @@ export function Header({ onOpenMenu }: { onOpenMenu: () => void }) {
     >
       <div className="mx-auto flex max-w-[1760px] items-center justify-between gap-7 px-10 py-[22px] max-[640px]:px-5 max-[640px]:py-[13px] max-[860px]:py-4">
         <Link href="/" className="flex items-center gap-3.5">
-          <Logo width={188} />
+          <Logo width="clamp(126px,30vw,188px)" />
         </Link>
 
         <nav className="hidden items-center gap-[clamp(16px,2.2vw,34px)] font-mono text-[14.5px] tracking-[.16em] uppercase min-[1101px]:flex">

@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 export function Logo({ width = 188 }: { width?: number | string }) {
+  const sizes = typeof width === "number" ? `${width}px` : "188px";
   return (
     <span
       className="relative block flex-none"
@@ -11,7 +12,7 @@ export function Logo({ width = 188 }: { width?: number | string }) {
         alt="OBA Architectes Firm"
         fill
         priority
-        sizes={typeof width === "number" ? `${width}px` : "188px"}
+        sizes={sizes}
         className="oba-logo-dark absolute inset-0 object-contain"
       />
       <Image
@@ -19,7 +20,7 @@ export function Logo({ width = 188 }: { width?: number | string }) {
         alt=""
         aria-hidden="true"
         fill
-        sizes={`${width}px`}
+        sizes={sizes}
         className="oba-logo-light absolute inset-0 object-contain"
       />
     </span>

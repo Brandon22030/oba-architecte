@@ -16,7 +16,7 @@ export function MobileMenu({ open, onClose }: { open: boolean; onClose: () => vo
 
   return (
     <div
-      className="fixed inset-0 z-150 grid grid-rows-[auto_1fr_auto]"
+      className="fixed inset-0 z-150 grid grid-rows-[auto_1fr_auto] overflow-y-auto"
       style={{ background: "var(--nk)", animation: "obaLineIn .6s cubic-bezier(.18,.8,.24,1) both" }}
     >
       <div
@@ -34,7 +34,7 @@ export function MobileMenu({ open, onClose }: { open: boolean; onClose: () => vo
         className="relative flex items-center justify-between border-b px-10 py-[22px] max-[640px]:px-5"
         style={{ borderColor: "rgba(var(--plr),.12)" }}
       >
-        <Logo width={164} />
+        <Logo width="clamp(120px,32vw,164px)" />
         <button
           onClick={onClose}
           aria-label="Fermer le menu"

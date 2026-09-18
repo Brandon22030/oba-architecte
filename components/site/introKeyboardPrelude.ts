@@ -74,21 +74,29 @@ function letterFragment(letter: "O" | "B" | "A", href: string) {
 
   // A single circle growing from the letter's center cleanly reveals it in one
   // motion — more reliable than a hand-tuned stroke path, which can leave part
-  // of the ring uncovered mid-draw (most visible on the round "O").
-  const circle = document.createElementNS(NS, "circle");
-  circle.setAttribute("cx", String(x + width / 2));
-  circle.setAttribute("cy", String(y + height / 2));
-  circle.setAttribute("r", "0");
-  circle.setAttribute("fill", "white");
-  mask.append(circle);
+  // of the ring uncovered mid-draw (most visible on the round "O"). The circle
+  // is created at its final radius and animated via `transform: scale()`
+  // rather than the `r` attribute — mobile browsers (notably iOS Safari) don't
+  // reliably animate SVG geometry attributes like `r` through the Web
+  // Animations API, which left the mask stuck at r=0 and the letter invisible.
+  const cx = x + width / 2;
+  const cy = y + height / 2;
   const radius = Math.hypot(width, height) / 2 + 14;
+  const circle = document.createElementNS(NS, "circle");
+  circle.setAttribute("cx", String(cx));
+  circle.setAttribute("cy", String(cy));
+  circle.setAttribute("r", String(radius));
+  circle.setAttribute("fill", "white");
+  circle.style.transformOrigin = `${cx}px ${cy}px`;
+  circle.style.transform = "scale(0)";
+  mask.append(circle);
 
   const defs = document.createElementNS(NS, "defs");
   defs.append(mask);
   image.setAttribute("mask", `url(#${id})`);
   svg.append(defs, image);
 
-  return { svg, circle, radius };
+  return { svg, circle };
 }
 
 function wordFragment(href: string) {
@@ -250,7 +258,7 @@ export function mountKeyboardPrelude({
     assembly.append(piece);
     const revealDelay = 3250 + index * 150;
     run(piece, [{ opacity: 1 }, { opacity: 1 }], revealDelay, 1);
-    run(drawing.circle, [{ r: 0 }, { r: drawing.radius }], revealDelay, 650, "cubic-bezier(.2,.8,.2,1)");
+    run(drawing.circle, [{ transform: "scale(0)" }, { transform: "scale(1)" }], revealDelay, 650, "cubic-bezier(.2,.8,.2,1)");
 
     const pieceCenterY = assemblyTop + (sy + sh / 2) * factor;
     const pieceOffsetY = floor - rect.height / 2 - pieceCenterY;

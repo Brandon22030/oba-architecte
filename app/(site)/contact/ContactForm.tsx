@@ -39,7 +39,7 @@ export function ContactForm() {
         </span>
         <input name="telephone" type="tel" className={fieldInput} style={{ borderColor: "rgba(var(--plr),.26)", color: "var(--pl)" }} />
       </label>
-      <label className="col-span-2 flex flex-col gap-2.25">
+      <label className="col-span-2 flex flex-col gap-2.25 max-[640px]:col-span-1">
         <span className={fieldLabel} style={{ color: "var(--pl)" }}>
           Nature du projet
         </span>
@@ -53,7 +53,7 @@ export function ContactForm() {
           ))}
         </select>
       </label>
-      <label className="col-span-2 flex flex-col gap-2.25">
+      <label className="col-span-2 flex flex-col gap-2.25 max-[640px]:col-span-1">
         <span className={fieldLabel} style={{ color: "var(--pl)" }}>
           Votre message
         </span>
@@ -65,7 +65,7 @@ export function ContactForm() {
           style={{ borderColor: "rgba(var(--plr),.26)", color: "var(--pl)" }}
         />
       </label>
-      <div className="col-span-2 flex flex-wrap items-center gap-5">
+      <div className="col-span-2 flex flex-wrap items-center gap-5 max-[640px]:col-span-1">
         <button
           type="submit"
           disabled={pending}

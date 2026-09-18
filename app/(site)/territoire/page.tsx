@@ -60,8 +60,8 @@ export default async function TerritoirePage() {
       <section className="border-t" style={{ borderColor: "rgba(var(--plr),.1)", background: "var(--nk3)" }}>
         <div className="mx-auto max-w-[1760px] px-10 py-[clamp(70px,9vw,120px)] max-[640px]:px-5 max-[1400px]:px-8">
           <div
-            className="grid gap-px max-[640px]:grid-cols-1 max-[860px]:grid-cols-2"
-            style={{ gridTemplateColumns: "repeat(4,minmax(0,1fr))", background: "rgba(var(--plr),.14)" }}
+            className="grid grid-cols-4 gap-px max-[640px]:grid-cols-1 max-[860px]:grid-cols-2"
+            style={{ background: "rgba(var(--plr),.14)" }}
           >
             {STATS.map((stat, i) => (
               <Reveal key={stat.value} delay={i * 90} className="px-6 pt-8 pb-11" style={{ background: "var(--nk3)" }}>

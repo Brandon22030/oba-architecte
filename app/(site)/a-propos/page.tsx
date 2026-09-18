@@ -93,7 +93,7 @@ export default async function AProposPage() {
 
       {/* Qui sommes-nous ? */}
       <section className="mx-auto max-w-[1760px] px-10 py-[clamp(80px,10vw,150px)] max-[640px]:px-5 max-[1400px]:px-8">
-        <div className="grid items-start gap-[clamp(36px,5vw,90px)] max-[1100px]:grid-cols-1" style={{ gridTemplateColumns: "minmax(0,.55fr) minmax(0,1.45fr)" }}>
+        <div className="grid grid-cols-[minmax(0,.55fr)_minmax(0,1.45fr)] items-start gap-[clamp(36px,5vw,90px)] max-[1100px]:grid-cols-1">
           <h2
             className="font-display sticky m-0 max-[1100px]:static"
             style={{ top: 140, fontSize: "clamp(30px,3.6vw,58px)", lineHeight: 1.02, fontVariationSettings: "'wdth' 82,'wght' 500" }}
@@ -152,8 +152,8 @@ export default async function AProposPage() {
             Domaines de compétences
           </h2>
           <div
-            className="grid gap-px max-[640px]:grid-cols-1 max-[860px]:grid-cols-2"
-            style={{ gridTemplateColumns: "repeat(4,minmax(0,1fr))", background: "rgba(var(--plr),.14)" }}
+            className="grid grid-cols-4 gap-px max-[640px]:grid-cols-1 max-[860px]:grid-cols-2"
+            style={{ background: "rgba(var(--plr),.14)" }}
           >
             {COMPETENCES.map((label, i) => (
               <Reveal
@@ -179,7 +179,7 @@ export default async function AProposPage() {
 
       {/* Le mot du General Manager */}
       <section className="mx-auto max-w-[1760px] px-10 py-[clamp(80px,11vw,160px)] max-[640px]:px-5 max-[1400px]:px-8">
-        <div className="grid items-start gap-[clamp(36px,5vw,84px)] max-[1100px]:grid-cols-1" style={{ gridTemplateColumns: "minmax(0,.8fr) minmax(0,1.2fr)" }}>
+        <div className="grid grid-cols-[minmax(0,.8fr)_minmax(0,1.2fr)] items-start gap-[clamp(36px,5vw,84px)] max-[1100px]:grid-cols-1">
           <Reveal variant="clip" className="relative max-w-[520px] border" style={{ background: "var(--nk3)", borderColor: "rgba(var(--plr),.16)", aspectRatio: "3/4" } as React.CSSProperties}>
             <PortraitSlot src={null} label="Portrait d'Armel Adigoun" className="h-full w-full border-0" />
             <span
@@ -262,7 +262,7 @@ export default async function AProposPage() {
         >
           Nos bureaux
         </h2>
-        <div className="grid gap-3.5 max-[640px]:grid-cols-1 max-[860px]:grid-cols-2" style={{ gridTemplateColumns: "repeat(4,minmax(0,1fr))" }}>
+        <div className="grid grid-cols-4 gap-3.5 max-[640px]:grid-cols-1 max-[860px]:grid-cols-2">
           {["agence-01", "agence-02", "filaire-agence-01", "filaire-agence-02"].map((stem, i) => (
             <Reveal key={stem} variant="clip" delay={i * 110} className="relative aspect-3/4 overflow-hidden" style={{ background: "var(--nk3)" } as React.CSSProperties}>
               <ZoomImage

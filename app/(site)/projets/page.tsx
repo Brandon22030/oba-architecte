@@ -20,7 +20,7 @@ export default async function ProjetsPage() {
         </p>
         <h1
           className="font-display relative m-0"
-          style={{ fontSize: "clamp(54px,13vw,190px)", lineHeight: 0.9, letterSpacing: "-.02em", fontVariationSettings: "'wdth' 94,'wght' 700" }}
+          style={{ fontSize: "clamp(36px,13vw,190px)", lineHeight: 0.9, letterSpacing: "-.02em", fontVariationSettings: "'wdth' 94,'wght' 700" }}
         >
           Réalisations
         </h1>

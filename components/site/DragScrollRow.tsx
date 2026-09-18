@@ -1,17 +1,26 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
+import { useImperativeHandle, useRef, type ReactNode, type Ref } from "react";
 
 /**
  * Horizontal drag-to-scroll strip, replacement for the mockup's
  * [data-strip] pointer-drag behavior.
  */
-export function DragScrollRow({ children, className }: { children: ReactNode; className?: string }) {
-  const ref = useRef<HTMLDivElement>(null);
+export function DragScrollRow({
+  children,
+  className,
+  ref,
+}: {
+  children: ReactNode;
+  className?: string;
+  ref?: Ref<HTMLDivElement>;
+}) {
+  const innerRef = useRef<HTMLDivElement>(null);
+  useImperativeHandle(ref, () => innerRef.current as HTMLDivElement);
   const state = useRef({ down: false, startX: 0, startScroll: 0, moved: false });
 
   function onPointerDown(e: React.PointerEvent) {
-    const el = ref.current;
+    const el = innerRef.current;
     if (!el) return;
     state.current = { down: true, startX: e.clientX, startScroll: el.scrollLeft, moved: false };
     el.style.scrollSnapType = "none";
@@ -19,7 +28,7 @@ export function DragScrollRow({ children, className }: { children: ReactNode; cl
   }
 
   function onPointerMove(e: React.PointerEvent) {
-    const el = ref.current;
+    const el = innerRef.current;
     if (!el || !state.current.down) return;
     const dx = e.clientX - state.current.startX;
     if (Math.abs(dx) > 4) state.current.moved = true;
@@ -27,7 +36,7 @@ export function DragScrollRow({ children, className }: { children: ReactNode; cl
   }
 
   function endDrag(e: React.PointerEvent) {
-    const el = ref.current;
+    const el = innerRef.current;
     if (!el) return;
     state.current.down = false;
     el.style.scrollSnapType = "x mandatory";
@@ -38,7 +47,7 @@ export function DragScrollRow({ children, className }: { children: ReactNode; cl
 
   return (
     <div
-      ref={ref}
+      ref={innerRef}
       data-strip="1"
       className={`flex cursor-grab gap-7 overflow-x-auto pb-3.5 [scroll-snap-type:x_mandatory] active:cursor-grabbing ${className ?? ""}`}
       onPointerDown={onPointerDown}

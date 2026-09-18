@@ -1,9 +1,9 @@
+import Image from "next/image";
 import Link from "next/link";
 import { CountUp } from "@/components/site/CountUp";
-import { DragScrollRow } from "@/components/site/DragScrollRow";
 import { IntroController } from "@/components/site/IntroController";
 import { Magnetic } from "@/components/site/Magnetic";
-import { ProjectCard } from "@/components/site/ProjectCard";
+import { ProjectsScrollStrip } from "@/components/site/ProjectsScrollStrip";
 import { Reveal } from "@/components/site/Reveal";
 import { ZoomImage } from "@/components/site/ZoomImage";
 import { getFeaturedProjects } from "@/lib/data/projects";
@@ -104,13 +104,13 @@ export default async function AccueilPage() {
               style={{ fontSize: "clamp(30px,4.6vw,66px)", fontVariationSettings: "'wdth' 68,'wght' 500" }}
             >
               <span>Architecture</span>
-              <span style={{ color: "var(--ac)" }}>◆</span>
+              <MarqueeMark />
               <span>Urbanisme</span>
-              <span style={{ color: "var(--ac)" }}>◆</span>
+              <MarqueeMark />
               <span>Paysagisme</span>
-              <span style={{ color: "var(--ac)" }}>◆</span>
+              <MarqueeMark />
               <span>Suivi de projets</span>
-              <span style={{ color: "var(--ac)" }}>◆</span>
+              <MarqueeMark />
             </div>
           ))}
         </div>
@@ -118,34 +118,12 @@ export default async function AccueilPage() {
 
       {/* Projects strip */}
       <section id="projets" className="border-t border-b py-[clamp(70px,9vw,120px)]" style={{ borderColor: "rgba(var(--plr),.1)", background: "var(--nk3)" }}>
-        <div className="mx-auto flex max-w-[1760px] flex-wrap items-end justify-between gap-6 px-10 max-[640px]:px-5">
-          <div>
-            <p className="m-0 mb-4 font-mono text-[14.5px] tracking-[.24em] uppercase" style={{ color: "var(--ac)" }}>
-              01 — Projets
-            </p>
-            <h2 className="font-display m-0" style={{ fontSize: "clamp(38px,6.4vw,104px)", lineHeight: 0.96, fontVariationSettings: "'wdth' 88,'wght' 600" }}>
-              Réalisations
-            </h2>
-          </div>
-          <p className="m-0 font-mono text-[14.5px] tracking-[.14em] uppercase" style={{ color: "var(--pl)" }}>
-            Faites défiler horizontalement →
-          </p>
-        </div>
-        <DragScrollRow className="mt-11 px-10 max-[640px]:px-5">
-          {featured.map((project) => (
-            <ProjectCard
-              key={project.slug}
-              project={project}
-              badge={project.category}
-              className="w-[min(640px,72vw)] flex-none [scroll-snap-align:center]"
-            />
-          ))}
-        </DragScrollRow>
+        <ProjectsScrollStrip featured={featured} />
       </section>
 
       {/* Stats */}
       <section className="mx-auto max-w-[1760px] px-10 py-[clamp(90px,12vw,170px)] max-[640px]:px-5 max-[1400px]:px-8">
-        <div className="grid gap-px max-[640px]:grid-cols-1 max-[860px]:grid-cols-2" style={{ gridTemplateColumns: "repeat(4,minmax(0,1fr))", background: "rgba(var(--plr),.14)" }}>
+        <div className="grid grid-cols-4 gap-px max-[640px]:grid-cols-1 max-[860px]:grid-cols-2" style={{ background: "rgba(var(--plr),.14)" }}>
           {STATS.map((stat, i) => (
             <Reveal key={stat.label} delay={i * 90} className="px-7 pt-9 pb-11" style={{ background: "var(--nk)" } as React.CSSProperties}>
               <CountUp
@@ -214,8 +192,8 @@ export default async function AccueilPage() {
           </Link>
         </Magnetic>
         <div
-          className="mt-11 grid gap-7 font-mono text-[15px] tracking-[.06em] max-[640px]:grid-cols-1 max-[860px]:grid-cols-2"
-          style={{ gridTemplateColumns: "repeat(4,minmax(0,1fr))", color: "var(--pl)" }}
+          className="mt-11 grid grid-cols-4 gap-7 font-mono text-[15px] tracking-[.06em] max-[640px]:grid-cols-1 max-[860px]:grid-cols-2"
+          style={{ color: "var(--pl)" }}
         >
           <p className="m-0" style={{ whiteSpace: "pre-line" }}>
             {settings.contact_adresse}
@@ -234,5 +212,13 @@ export default async function AccueilPage() {
         </div>
       </section>
     </>
+  );
+}
+
+function MarqueeMark() {
+  return (
+    <span className="relative inline-block flex-none" style={{ width: "0.42em", height: "0.42em" }}>
+      <Image src="/assets/b-oba-marque.png" alt="" aria-hidden="true" fill sizes="60px" className="object-contain" />
+    </span>
   );
 }

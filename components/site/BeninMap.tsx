@@ -99,8 +99,8 @@ export function BeninMap({ villes }: { villes: Ville[] }) {
   return (
     <div
       ref={wrapRef}
-      className="relative grid items-stretch gap-9 max-[1000px]:grid-cols-1"
-      style={{ gridTemplateColumns: "minmax(0,1fr) 320px", color: "var(--pl)" }}
+      className="relative grid grid-cols-[minmax(0,1fr)_320px] items-stretch gap-9 max-[1000px]:grid-cols-1"
+      style={{ color: "var(--pl)" }}
     >
       {/* Stage */}
       <div className="relative min-h-[460px] overflow-hidden border" style={{ borderColor: "rgba(var(--plr),.14)" }}>
