@@ -25,12 +25,18 @@ export default async function ContactPage() {
           />
         </div>
         <div className="relative mx-auto max-w-[1760px] px-10 pt-[clamp(110px,14vw,190px)] pb-[clamp(50px,6vw,80px)] max-[640px]:px-5 max-[1400px]:px-8">
-          <p className="m-0 mb-5.5 font-mono text-[14.5px] tracking-[.24em] uppercase" style={{ color: "var(--ac)" }}>
+          <p className="m-0 mb-5.5 font-mono text-[14.5px] tracking-[.24em] uppercase" style={{ color: "#EF8B12" }}>
             Contact
           </p>
           <h1
             className="font-display m-0"
-            style={{ fontSize: "clamp(46px,11vw,168px)", lineHeight: 0.9, letterSpacing: "-.02em", fontVariationSettings: "'wdth' 94,'wght' 700" }}
+            style={{
+              fontSize: "clamp(46px,11vw,168px)",
+              lineHeight: 0.9,
+              letterSpacing: "-.02em",
+              fontVariationSettings: "'wdth' 94,'wght' 700",
+              color: "#efeae1",
+            }}
           >
             Parlons
             <br />

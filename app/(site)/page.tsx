@@ -181,17 +181,21 @@ export default async function AccueilPage() {
           />
         </div>
         <div className="relative mx-auto max-w-[1760px] px-10 py-[clamp(110px,16vw,240px)] text-center max-[640px]:px-5">
-          <p className="m-0 mb-5.5 font-mono text-[14.5px] tracking-[.24em] uppercase" style={{ color: "var(--ac)" }}>
+          <p className="m-0 mb-5.5 font-mono text-[14.5px] tracking-[.24em] uppercase" style={{ color: "#EF8B12" }}>
             02 — Territoire
           </p>
-          <Reveal as="h2" className="font-display m-0" style={{ fontSize: "clamp(34px,5.4vw,86px)", lineHeight: 1.04, fontVariationSettings: "'wdth' 84,'wght' 500" } as React.CSSProperties}>
+          <Reveal
+            as="h2"
+            className="font-display m-0"
+            style={{ fontSize: "clamp(34px,5.4vw,86px)", lineHeight: 1.04, fontVariationSettings: "'wdth' 84,'wght' 500", color: "#efeae1" } as React.CSSProperties}
+          >
             Côte d&apos;Ivoire · Ghana · Congo · Togo · Bénin
           </Reveal>
           <Magnetic>
             <Link
               href="/territoire"
               className="mt-9.5 inline-flex items-center gap-3.5 rounded-full border px-8 py-4.5 font-mono text-[15px] tracking-[.16em] uppercase transition-colors hover:bg-[#EF8B12] hover:text-[#100F0C]"
-              style={{ borderColor: "rgba(var(--plr),.34)" }}
+              style={{ borderColor: "rgba(239,234,225,.34)", color: "#efeae1" }}
             >
               Ouvrir la carte du Bénin
               <span className="block h-px w-7.5 bg-current" />
