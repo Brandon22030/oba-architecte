@@ -28,7 +28,31 @@ export function BeninMap({ villes }: { villes: Ville[] }) {
   const nodeRefs = useRef<(SVGGElement | null)[]>([]);
 
   const [hovered, setHovered] = useState<Ville | null>(null);
-  const [tooltip, setTooltip] = useState<{ x: number; y: number; ville: Ville } | null>(null);
+  const [hoverY, setHoverY] = useState<number | null>(null);
+  const [isWide, setIsWide] = useState(true);
+
+  useEffect(() => {
+    const mq = matchMedia("(min-width: 1000.5px)");
+    const update = () => setIsWide(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  function enterPoint(e: React.MouseEvent, ville: Ville) {
+    setHovered(ville);
+    const wr = wrapRef.current?.getBoundingClientRect();
+    if (!wr) return;
+    const mr = e.currentTarget.getBoundingClientRect();
+    const margin = 90;
+    const y = mr.top + mr.height / 2 - wr.top;
+    setHoverY(Math.min(Math.max(y, margin), wr.height - margin));
+  }
+
+  function leavePoint() {
+    setHovered(null);
+    setHoverY(null);
+  }
 
   const geometry = useMemo(() => {
     const benin = OBA_GEO.find((f) => f.id === "204")!;
@@ -71,12 +95,6 @@ export function BeninMap({ villes }: { villes: Ville[] }) {
 
   const active = hovered ?? villes[0];
   const totalProjects = villes.reduce((n, v) => n + v.projets.length, 0);
-
-  function placeTooltip(e: React.MouseEvent, ville: Ville) {
-    const wr = wrapRef.current?.getBoundingClientRect();
-    if (!wr) return;
-    setTooltip({ x: e.clientX - wr.left, y: e.clientY - wr.top, ville });
-  }
 
   return (
     <div
@@ -198,12 +216,8 @@ export function BeninMap({ villes }: { villes: Ville[] }) {
                   className="cursor-crosshair"
                   transform={`translate(${p.xy[0].toFixed(1)},${p.xy[1].toFixed(1)})`}
                   style={{ opacity: 0, transition: "opacity 240ms linear" }}
-                  onMouseEnter={() => setHovered(p.ville)}
-                  onMouseMove={(e) => placeTooltip(e, p.ville)}
-                  onMouseLeave={() => {
-                    setHovered(null);
-                    setTooltip(null);
-                  }}
+                  onMouseEnter={(e) => enterPoint(e, p.ville)}
+                  onMouseLeave={leavePoint}
                 >
                   <circle r={15} fill="transparent" />
                   <rect
@@ -233,32 +247,6 @@ export function BeninMap({ villes }: { villes: Ville[] }) {
           </g>
         </svg>
 
-        {tooltip && (
-          <div
-            className="pointer-events-none absolute z-5 max-w-[290px] border px-4 py-3.5 backdrop-blur-[8px]"
-            style={{
-              left: Math.max(4, tooltip.x + 18),
-              top: tooltip.y + 18,
-              background: "rgba(var(--nk2r),.92)",
-              borderColor: ORANGE,
-            }}
-          >
-            <p className="font-display m-0" style={{ fontSize: 22, lineHeight: 1.1, fontVariationSettings: "'wdth' 84,'wght' 600" }}>
-              {tooltip.ville.nom}
-            </p>
-            <p className="mt-1.5 mb-0 font-mono text-[13.5px] tracking-[.14em] uppercase" style={{ color: ORANGE }}>
-              {tooltip.ville.projets.length > 1 ? `${tooltip.ville.projets.length} projets` : "1 projet"} ·{" "}
-              {formatDeg(tooltip.ville.lat, "N", "S")} / {formatDeg(tooltip.ville.lon, "E", "O")}
-            </p>
-            <ul className="mt-2.75 mb-0 flex list-none flex-col gap-1 p-0">
-              {tooltip.ville.projets.map((proj) => (
-                <li key={proj} className="font-mono text-sm" style={{ color: "var(--pl)" }}>
-                  {proj}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
       </div>
 
       {/* Side panel */}
@@ -282,7 +270,14 @@ export function BeninMap({ villes }: { villes: Ville[] }) {
           </div>
         </div>
 
-        <div className="max-w-[320px]">
+        <div
+          className="max-w-[320px] transition-[top] duration-200 ease-out"
+          style={
+            isWide && hoverY != null
+              ? { position: "absolute", right: 0, top: hoverY, transform: "translateY(-50%)" }
+              : undefined
+          }
+        >
           <p className="m-0 mb-2.5 font-mono text-sm font-medium tracking-[.2em] uppercase" style={{ color: ORANGE }}>
             {hovered ? (active.projets.length > 1 ? `${active.projets.length} projets rattachés` : "1 projet rattaché") : "Survolez un point"}
           </p>

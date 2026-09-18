@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "../styles/tokens.css";
 @import "../styles/animations.css";
+@import "../styles/keyboard-prelude.css";
 
 @theme inline {
   --color-ac: var(--ac);

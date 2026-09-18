@@ -1,0 +1,84 @@
+/* AZERTY keyboard prelude, ported from site/preview.html's OBAKeyboardIntro.
+   Structural/static rules only — positions, transforms and stroke offsets
+   during the animation are computed live in components/site/introKeyboardPrelude.ts. */
+
+.keyboard-intro {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.keyboard-board {
+  position: absolute;
+  width: min(760px, calc(100vw - 32px));
+  left: 50%;
+  top: 35%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  gap: clamp(3px, 0.6vw, 8px);
+}
+
+.keyboard-row {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(3px, 0.6vw, 8px);
+}
+
+.keyboard-row-bottom {
+  grid-template-columns: 1fr 1fr 1fr 6fr 1.5fr 1.5fr;
+}
+
+.keyboard-key {
+  height: clamp(24px, min(5vw, 8vh), 54px);
+  display: grid;
+  place-items: center;
+  transform-origin: center bottom;
+  color: var(--pl);
+  font: 400 clamp(9px, 1.6vw, 16px) / 1 var(--font-mono), monospace;
+}
+
+.keyboard-key-cap {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(var(--plr), 0.16);
+  border-radius: 4px;
+  background: var(--nk3);
+}
+
+.keyboard-key-label {
+  position: relative;
+}
+
+.keyboard-key[data-key] {
+  z-index: 2;
+}
+
+.keyboard-key-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.keyboard-key-ring circle {
+  fill: none;
+  stroke: var(--ac);
+  stroke-width: 1.7;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.keyboard-assembly {
+  position: absolute;
+}
+
+.keyboard-piece {
+  position: absolute;
+  transform-origin: center;
+  opacity: 0;
+}
+
+.keyboard-word {
+  opacity: 1;
+}

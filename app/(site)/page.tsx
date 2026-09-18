@@ -62,14 +62,11 @@ export default async function AccueilPage() {
               lineHeight: 0.9,
               letterSpacing: "-.02em",
               fontVariationSettings: "'wdth' 82,'wght' 700",
-              animation: "obaWdth 9s ease-in-out infinite",
             }}
           >
             OBA
             <br />
-            ARCHITECTES
-            <br />
-            FIRM
+            ARCHITECTES FIRM
           </h1>
           <div className="mt-9 flex flex-wrap items-end justify-between gap-9">
             <p className="m-0 max-w-[46ch] font-light" style={{ fontSize: "clamp(19px,1.65vw,25px)", color: "var(--pl)" }}>

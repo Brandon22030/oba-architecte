@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Logo } from "./Logo";
+import { KEYBOARD_PRELUDE_DURATION, mountKeyboardPrelude, type PreludeAnimate } from "./introKeyboardPrelude";
 
 /**
  * Full-screen splash intro, ported from the reference's [data-ii="voile"]
@@ -9,11 +10,14 @@ import { Logo } from "./Logo";
  * row (tagline + "Entrée dans le site" progress bar). Session-gated and
  * reduced-motion aware.
  *
- * Sequence: the logo first fades in large and centered, pauses, then travels
- * (translate + scale, computed live from its real header-row position) to
- * its resting spot top-left — only once it settles there does the rest of
- * the overlay (skip button, label, headline, rule, footer) fade in. Total
- * auto-dismiss after TOTAL_DURATION — the skip button or Escape end it early.
+ * Sequence: an AZERTY keyboard prelude types and assembles the logo out of
+ * its own letterforms (see introKeyboardPrelude.ts), which settles centered
+ * on screen; the real logo then takes over at that same centered spot,
+ * pauses, and travels (translate + scale, computed live from its real
+ * header-row position) to its resting spot top-left — only once it settles
+ * there does the rest of the overlay (skip button, label, headline, rule,
+ * footer) fade in. Total auto-dismiss after TOTAL_DURATION — the skip
+ * button or Escape end it early.
  *
  * Mount once on the homepage only; visibility is driven purely by the
  * "oba-intro-running" class on <html> (see app/globals.css) so the overlay
@@ -21,26 +25,30 @@ import { Logo } from "./Logo";
  * is added synchronously in <head>, before hydration, by introInitScript.
  */
 
-const SESSION_KEY = "oba-intro-v5";
+const SESSION_KEY = "oba-intro-v6";
 const EXIT_DURATION = 750;
 
 const LOGO = {
-  fade: 550,
   pause: 650,
   travel: 750,
   initialWidth: 300,
   easing: "cubic-bezier(.45,0,.2,1)",
 };
-const SETTLED = LOGO.fade + LOGO.pause + LOGO.travel;
+// The keyboard prelude forms the logo in place of a fade-in, so the logo's own
+// timeline is just pause + travel — but everything after it waits for the prelude too.
+const SETTLED = LOGO.pause + LOGO.travel;
+const BASE = KEYBOARD_PRELUDE_DURATION + SETTLED;
 
-// Content stagger (ms from mount) — everything below waits for the logo to settle.
+// Content stagger (ms from mount). The skip button stays available almost
+// immediately (matching the reference — it must be reachable throughout the
+// whole prelude); everything else waits for the logo to settle.
 const DELAY = {
-  skip: SETTLED,
-  label: SETTLED + 120,
-  lead: SETTLED + 260,
-  title: SETTLED + 420,
-  rule: SETTLED + 680,
-  footer: SETTLED + 520,
+  skip: 250,
+  label: BASE + 120,
+  lead: BASE + 260,
+  title: BASE + 420,
+  rule: BASE + 680,
+  footer: BASE + 520,
 };
 const TOTAL_DURATION = DELAY.rule + 5500;
 
@@ -50,12 +58,17 @@ export function IntroController() {
   const [leaving, setLeaving] = useState(false);
   const dismissedRef = useRef(false);
   const logoRef = useRef<HTMLSpanElement>(null);
-  const logoAnimationRef = useRef<Animation | null>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const animationsRef = useRef<Animation[]>([]);
+  const keyboardStageRef = useRef<HTMLElement | null>(null);
 
   const dismiss = useCallback(() => {
     if (dismissedRef.current) return;
     dismissedRef.current = true;
-    logoAnimationRef.current?.cancel();
+    animationsRef.current.forEach((animation) => animation.cancel());
+    animationsRef.current = [];
+    keyboardStageRef.current?.remove();
+    keyboardStageRef.current = null;
     setLeaving(true);
     window.setTimeout(() => {
       document.documentElement.classList.remove("oba-intro-running");
@@ -69,27 +82,78 @@ export function IntroController() {
     if (!document.documentElement.classList.contains("oba-intro-running")) return;
 
     const logo = logoRef.current;
-    if (logo?.animate) {
+    const overlay = overlayRef.current;
+    let cancelled = false;
+
+    const animate: PreludeAnimate = (element, frames, options) => {
+      const animation = element.animate(frames, options);
+      animationsRef.current.push(animation);
+      return animation.finished.then(
+        () => undefined,
+        () => undefined,
+      );
+    };
+
+    async function run() {
+      if (!logo?.animate) {
+        if (logo) {
+          logo.style.opacity = "1";
+          logo.style.transform = "none";
+        }
+        return;
+      }
+
       const bounds = logo.getBoundingClientRect();
       const width = Math.min(LOGO.initialWidth, innerWidth * 0.6, innerHeight * 0.55 * (bounds.width / bounds.height));
+
+      if (overlay) {
+        const theme = document.documentElement.getAttribute("data-oba-t");
+        const logoSrc = theme === "clair" ? "/assets/logo-oba-prelude-clair.png" : "/assets/logo-oba-prelude-sombre.png";
+        const prelude = mountKeyboardPrelude({
+          container: overlay,
+          width,
+          logoSrc,
+          home: { left: bounds.left, top: bounds.top, width: bounds.width, height: bounds.height },
+          pause: LOGO.pause,
+          travel: LOGO.travel,
+          easing: LOGO.easing,
+          animate,
+        });
+        keyboardStageRef.current = prelude.stage;
+        // The assembly itself travels all the way to the logo's exact resting box
+        // (see introKeyboardPrelude.ts), so once it settles we just reveal the real
+        // element in place and drop the fake one — same box, no second animation,
+        // no jump.
+        await prelude.finished;
+        if (cancelled) return;
+        logo.style.opacity = "1";
+        logo.style.transform = "none";
+        prelude.stage.remove();
+        keyboardStageRef.current = null;
+        return;
+      }
+
+      // Fallback for the rare case the overlay ref isn't available: the old
+      // fade → pause → travel sequence, driven directly on the real logo.
       const scale = width / bounds.width;
       const x = (innerWidth - width) / 2 - bounds.left;
       const y = (innerHeight - bounds.height * scale) / 2 - bounds.top;
       const centered = `translate(${x}px, ${y}px) scale(${scale})`;
-
-      logoAnimationRef.current = logo.animate(
+      const fade = 550;
+      const settled = fade + SETTLED;
+      const logoAnimation = logo.animate(
         [
           { opacity: 0, transform: centered, offset: 0, easing: "ease-out" },
-          { opacity: 1, transform: centered, offset: LOGO.fade / SETTLED },
-          { opacity: 1, transform: centered, offset: (LOGO.fade + LOGO.pause) / SETTLED, easing: LOGO.easing },
+          { opacity: 1, transform: centered, offset: fade / settled },
+          { opacity: 1, transform: centered, offset: (fade + LOGO.pause) / settled, easing: LOGO.easing },
           { opacity: 1, transform: "translate(0px, 0px) scale(1)", offset: 1 },
         ],
-        { duration: SETTLED, fill: "both" },
+        { duration: settled, fill: "both" },
       );
-    } else if (logo) {
-      logo.style.opacity = "1";
-      logo.style.transform = "none";
+      animationsRef.current.push(logoAnimation);
     }
+
+    run();
 
     const timer = window.setTimeout(dismiss, TOTAL_DURATION);
     const onResize = () => dismiss();
@@ -106,22 +170,26 @@ export function IntroController() {
     motion.addEventListener("change", onMotionChange);
 
     return () => {
+      cancelled = true;
       clearTimeout(timer);
       removeEventListener("resize", onResize);
       removeEventListener("keydown", onKeydown);
       motion.removeEventListener("change", onMotionChange);
-      // Cancel and drop the logo animation on every teardown (not just dismiss()) —
-      // otherwise React StrictMode's dev-only mount→cleanup→mount double-invoke
-      // leaves the first Animation active, so the second mount's
-      // getBoundingClientRect() reads the already-transformed (centered) box
-      // instead of the natural resting one, collapsing the travel into a no-op.
-      logoAnimationRef.current?.cancel();
-      logoAnimationRef.current = null;
+      // Cancel and drop every tracked animation (prelude + logo) on every teardown
+      // (not just dismiss()) — otherwise React StrictMode's dev-only mount→cleanup→
+      // mount double-invoke leaves the first run's Animations active, so the second
+      // mount's getBoundingClientRect() reads an already-transformed box instead of
+      // the natural resting one, collapsing the travel into a no-op.
+      animationsRef.current.forEach((animation) => animation.cancel());
+      animationsRef.current = [];
+      keyboardStageRef.current?.remove();
+      keyboardStageRef.current = null;
     };
   }, [dismiss]);
 
   return (
     <div
+      ref={overlayRef}
       className="oba-intro-overlay"
       style={{
         position: "fixed",

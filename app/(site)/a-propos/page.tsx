@@ -74,9 +74,7 @@ export default async function AProposPage() {
           >
             OBA
             <br />
-            Architectes
-            <br />
-            Firm
+            ARCHITECTES FIRM
           </h1>
           <p
             className="font-display m-0"
