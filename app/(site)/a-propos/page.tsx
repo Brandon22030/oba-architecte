@@ -96,7 +96,7 @@ export default async function AProposPage() {
         <div className="grid items-start gap-[clamp(36px,5vw,90px)] max-[1100px]:grid-cols-1" style={{ gridTemplateColumns: "minmax(0,.55fr) minmax(0,1.45fr)" }}>
           <h2
             className="font-display sticky m-0 max-[1100px]:static"
-            style={{ top: 120, fontSize: "clamp(30px,3.6vw,58px)", lineHeight: 1.02, fontVariationSettings: "'wdth' 82,'wght' 500" }}
+            style={{ top: 140, fontSize: "clamp(30px,3.6vw,58px)", lineHeight: 1.02, fontVariationSettings: "'wdth' 82,'wght' 500" }}
           >
             Qui sommes-nous ?
           </h2>

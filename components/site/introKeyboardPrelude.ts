@@ -278,7 +278,10 @@ export function mountKeyboardPrelude({
   assembly.append(guides);
   run(guides, [{ opacity: 0.75 }, { opacity: 0 }], 4250, 400);
 
-  // Orange accent: a live theme-colored square (not a raster slice) so it matches var(--ac) in both themes.
+  // Orange accent: a live-colored square (not a raster slice) so its edges stay crisp
+  // while flying. Fixed to the exact orange baked into the logo PNG (identical in both
+  // logo-oba-clair.png and logo-oba-sombre.png) — not var(--ac), which is deliberately
+  // darkened in the light theme for contrast elsewhere and would not match the real logo.
   const [ox, oy, ow, oh] = SLICES.orange;
   const orangePiece = document.createElement("div");
   Object.assign(orangePiece.style, {
@@ -287,7 +290,7 @@ export function mountKeyboardPrelude({
     top: `${oy * factor}px`,
     width: `${ow * factor}px`,
     height: `${oh * factor}px`,
-    background: "var(--ac)",
+    background: "rgb(242,135,0)",
     opacity: "0",
   });
   assembly.append(orangePiece);
