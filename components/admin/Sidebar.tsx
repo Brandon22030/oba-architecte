@@ -9,6 +9,7 @@ const LINKS = [
   { href: "/admin", label: "Tableau de bord" },
   { href: "/admin/projets", label: "Projets" },
   { href: "/admin/villes", label: "Villes" },
+  { href: "/admin/actualites", label: "Actualités" },
   { href: "/admin/equipe", label: "Équipe" },
   { href: "/admin/demandes", label: "Demandes de contact" },
   { href: "/admin/reglages", label: "Réglages" },

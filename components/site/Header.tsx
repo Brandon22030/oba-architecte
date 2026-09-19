@@ -11,6 +11,7 @@ const NAV_LINKS = [
   { href: "/", label: "Accueil" },
   { href: "/a-propos", label: "À propos" },
   { href: "/projets", label: "Projets" },
+  { href: "/actualite", label: "Actualité" },
   { href: "/territoire", label: "Territoire" },
   { href: "/contact", label: "Contact" },
 ];

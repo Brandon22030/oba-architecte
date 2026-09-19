@@ -2,6 +2,8 @@
 
 import { randomUUID } from "crypto";
 import { revalidatePath } from "next/cache";
+import { flash } from "@/lib/admin/flash";
+import type { UploadState } from "@/lib/admin/upload-state";
 import { createClient } from "@/lib/supabase/server";
 
 function field(formData: FormData, key: string): string {
@@ -25,6 +27,7 @@ export async function createTeamMember(formData: FormData) {
   const { error } = await supabase.from("team_members").insert({ name, role, sort_order: count ?? 0 });
   if (error) throw error;
 
+  await flash("Enregistrement réussi");
   revalidatePath("/admin/equipe");
 }
 
@@ -35,6 +38,7 @@ export async function updateTeamMember(id: string, formData: FormData) {
     .update({ name: field(formData, "name"), role: field(formData, "role") })
     .eq("id", id);
   if (error) throw error;
+  await flash("Enregistrement réussi");
   revalidatePath("/admin/equipe");
 }
 
@@ -49,12 +53,13 @@ export async function deleteTeamMember(id: string, avatarUrl: string | null) {
   const { error } = await supabase.from("team_members").delete().eq("id", id);
   if (error) throw error;
 
+  await flash("Suppression effectuée");
   revalidatePath("/admin/equipe");
 }
 
-export async function uploadAvatar(id: string, formData: FormData) {
+export async function uploadAvatar(id: string, _prevState: UploadState, formData: FormData): Promise<UploadState> {
   const file = formData.get("file");
-  if (!(file instanceof File) || file.size === 0) return;
+  if (!(file instanceof File) || file.size === 0) return { error: "Aucun fichier sélectionné." };
 
   const supabase = await createClient();
 
@@ -65,17 +70,19 @@ export async function uploadAvatar(id: string, formData: FormData) {
     contentType: file.type || "image/jpeg",
     cacheControl: "3600",
   });
-  if (uploadError) throw uploadError;
+  if (uploadError) return { error: uploadError.message };
 
   const {
     data: { publicUrl },
   } = supabase.storage.from("team-avatars").getPublicUrl(path);
 
   const { error } = await supabase.from("team_members").update({ avatar_url: publicUrl }).eq("id", id);
-  if (error) throw error;
+  if (error) return { error: error.message };
 
+  await flash("Enregistrement réussi");
   revalidatePath("/admin/equipe");
   revalidatePath("/a-propos");
+  return { error: null };
 }
 
 export async function moveTeamMember(id: string, direction: "up" | "down") {

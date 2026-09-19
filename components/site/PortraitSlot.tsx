@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ZoomImage } from "./ZoomImage";
 
 /**
  * Portrait box: shows the real photo once avatarUrl is set from the admin
@@ -10,10 +11,15 @@ export function PortraitSlot({
   src,
   label,
   className,
+  grayscaleHover = false,
 }: {
   src: string | null;
   label: string;
   className?: string;
+  /** Team grid look: photo starts fully desaturated, reveals its real
+   *  colors (+ a slight zoom) on hover — reuses ZoomImage's existing
+   *  hover mechanics with a full grayscale filter. */
+  grayscaleHover?: boolean;
 }) {
   return (
     <div
@@ -21,7 +27,11 @@ export function PortraitSlot({
       style={{ background: "var(--nk)", borderColor: "rgba(var(--plr),.16)" }}
     >
       {src ? (
-        <Image src={src} alt={label} fill className="object-cover" />
+        grayscaleHover ? (
+          <ZoomImage src={src} alt={label} fill filter="grayscale(1)" wrapperClassName="absolute inset-0 overflow-hidden" />
+        ) : (
+          <Image src={src} alt={label} fill className="object-cover" />
+        )
       ) : (
         <div
           className="absolute inset-0 flex items-center justify-center px-4 text-center font-mono text-xs tracking-[.1em] uppercase"

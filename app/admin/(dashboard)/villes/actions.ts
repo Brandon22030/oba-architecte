@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { flash } from "@/lib/admin/flash";
 import { createClient } from "@/lib/supabase/server";
 
 function field(formData: FormData, key: string): string {
@@ -26,6 +27,7 @@ export async function createVille(formData: FormData) {
   const { error } = await supabase.from("villes").insert({ nom, lat, lon, sort_order: count ?? 0 });
   if (error) throw error;
 
+  await flash("Enregistrement réussi");
   revalidatePath("/admin/villes");
   revalidatePath("/territoire");
 }
@@ -40,6 +42,7 @@ export async function updateVille(id: string, formData: FormData) {
   const { error } = await supabase.from("villes").update({ nom, lat, lon }).eq("id", id);
   if (error) throw error;
 
+  await flash("Enregistrement réussi");
   revalidatePath("/admin/villes");
   revalidatePath("/admin/projets");
   revalidatePath("/territoire");
@@ -50,6 +53,7 @@ export async function deleteVille(id: string) {
   const { error } = await supabase.from("villes").delete().eq("id", id);
   if (error) throw error;
 
+  await flash("Suppression effectuée");
   revalidatePath("/admin/villes");
   revalidatePath("/admin/projets");
   revalidatePath("/territoire");

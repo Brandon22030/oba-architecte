@@ -91,6 +91,65 @@
     clip-path: inset(0 0 0 0);
   }
 
+  /* Reinforces the scroll cascade on the "Domaines de compétences" rows
+     (app/(site)/a-propos/page.tsx): a small accent tick draws in top-to-bottom
+     and the index number lights up from muted to accent, staggered by the
+     same per-row delay as the row's own fade-up. */
+  .oba-domaine-tick {
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.75s cubic-bezier(0.18, 0.8, 0.24, 1);
+  }
+  .oba-domaine-row.oba-vu .oba-domaine-tick {
+    transform: scaleY(1);
+  }
+  .oba-domaine-num {
+    color: rgba(var(--plr), 0.45);
+    transition: color 0.6s ease 0.15s;
+  }
+  .oba-domaine-row.oba-vu .oba-domaine-num {
+    color: var(--ac);
+  }
+
+  /* Hover: the row "comes forward" — background lifts, indent grows, tick
+     thickens, title/description brighten. Purely decorative (rows aren't
+     links), so it only needs to read as emphasis, not affordance. */
+  .oba-domaine-row {
+    transition:
+      background-color 0.5s ease,
+      border-color 0.5s ease,
+      padding-left 0.5s cubic-bezier(0.18, 0.8, 0.24, 1);
+  }
+  .oba-domaine-row:hover {
+    background: rgba(var(--plr), 0.05);
+    border-color: rgba(var(--plr), 0.28);
+    padding-left: 2rem;
+  }
+  .oba-domaine-row:hover .oba-domaine-tick {
+    width: 4px;
+  }
+  .oba-domaine-tick {
+    transition:
+      transform 0.75s cubic-bezier(0.18, 0.8, 0.24, 1),
+      width 0.4s ease;
+  }
+  .oba-domaine-row:hover .oba-domaine-num {
+    color: var(--ac);
+  }
+  .oba-domaine-title {
+    transition: color 0.4s ease;
+  }
+  .oba-domaine-row:hover .oba-domaine-title {
+    color: var(--ac);
+  }
+  .oba-domaine-desc {
+    transition: opacity 0.4s ease;
+    opacity: 0.85;
+  }
+  .oba-domaine-row:hover .oba-domaine-desc {
+    opacity: 1;
+  }
+
   [data-strip] {
     scrollbar-width: none;
   }

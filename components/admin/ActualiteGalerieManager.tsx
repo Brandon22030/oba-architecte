@@ -1,32 +1,33 @@
 import Image from "next/image";
 import {
-  deleteProjectImage,
-  moveProjectImage,
+  deleteActualiteImage,
+  moveActualiteImage,
   setCoverImage,
   updateImageAlt,
-  uploadProjectImage,
-} from "@/app/admin/(dashboard)/projets/actions";
-import type { Project, ProjectImage } from "@/lib/data/project-constants";
+  uploadActualiteImage,
+} from "@/app/admin/(dashboard)/actualites/actions";
+import type { Actualite, ActualiteImage } from "@/lib/data/actualite-constants";
 import { DeleteButton } from "./DeleteButton";
 import { inputClass, secondaryButtonClass } from "./ui";
 import { UploadField } from "./UploadField";
 
-export function GalerieManager({ project, images }: { project: Project; images: ProjectImage[] }) {
-  const upload = uploadProjectImage.bind(null, project.id);
+export function ActualiteGalerieManager({ actualite, images }: { actualite: Actualite; images: ActualiteImage[] }) {
+  const upload = uploadActualiteImage.bind(null, actualite.id);
 
   return (
     <div className="flex flex-col gap-6">
       <p className="m-0 text-admin-muted">
-        {images.length} image{images.length > 1 ? "s" : ""}. Utilisez les flèches pour réordonner.
+        {images.length} image{images.length > 1 ? "s" : ""}. Utilisez les flèches pour réordonner. La première image
+        versée devient automatiquement la couverture.
       </p>
 
       <div className="grid grid-cols-3 gap-5 max-[640px]:grid-cols-1 max-[1000px]:grid-cols-2">
         {images.map((image, i) => {
-          const updateAlt = updateImageAlt.bind(null, project.id, image.id);
-          const moveUp = moveProjectImage.bind(null, project.id, image.id, "up");
-          const moveDown = moveProjectImage.bind(null, project.id, image.id, "down");
-          const setCover = setCoverImage.bind(null, project.id, image.url);
-          const isCover = project.coverImageUrl === image.url;
+          const updateAlt = updateImageAlt.bind(null, actualite.id, image.id);
+          const moveUp = moveActualiteImage.bind(null, actualite.id, image.id, "up");
+          const moveDown = moveActualiteImage.bind(null, actualite.id, image.id, "down");
+          const setCover = setCoverImage.bind(null, actualite.id, image.url);
+          const isCover = actualite.coverImageUrl === image.url;
 
           return (
             <div key={image.id} className="flex flex-col gap-2.5 rounded-lg bg-admin-bg p-3">
@@ -72,7 +73,7 @@ export function GalerieManager({ project, images }: { project: Project; images: 
                   </form>
                 )}
                 <DeleteButton
-                  action={deleteProjectImage.bind(null, project.id, image.id, image.url)}
+                  action={deleteActualiteImage.bind(null, actualite.id, image.id, image.url)}
                   confirmText="Retirer cette image de la galerie ?"
                   label="Retirer"
                   className="rounded border border-[#b3261e]/30 px-2.5 py-1.5 text-xs text-[#b3261e] hover:bg-[#b3261e]/5"

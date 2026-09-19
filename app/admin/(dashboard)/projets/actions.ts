@@ -3,6 +3,8 @@
 import { randomUUID } from "crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { flash } from "@/lib/admin/flash";
+import type { UploadState } from "@/lib/admin/upload-state";
 import { createClient } from "@/lib/supabase/server";
 import type { ProjectStatut } from "@/lib/data/project-constants";
 
@@ -48,6 +50,7 @@ export async function createProject(formData: FormData) {
 
   if (error) throw error;
 
+  await flash("Enregistrement réussi");
   revalidatePath("/admin/projets");
   redirect(`/admin/projets/${data.id}`);
 }
@@ -77,6 +80,7 @@ export async function updateProjectCartouche(projectId: string, formData: FormDa
 
   if (error) throw error;
 
+  await flash("Enregistrement réussi");
   revalidatePath(`/admin/projets/${projectId}`);
   revalidatePath("/admin/projets");
 }
@@ -90,6 +94,7 @@ export async function attachProjectToVille(villeId: string, formData: FormData) 
   const { error } = await supabase.from("projects").update({ ville_id: villeId }).eq("id", projectId);
   if (error) throw error;
 
+  await flash("Enregistrement réussi");
   revalidatePath(`/admin/projets/${projectId}`);
   revalidatePath("/admin/projets");
   revalidatePath("/admin/villes");
@@ -102,6 +107,7 @@ export async function detachProjectFromVille(projectId: string) {
   const { error } = await supabase.from("projects").update({ ville_id: null }).eq("id", projectId);
   if (error) throw error;
 
+  await flash("Enregistrement réussi");
   revalidatePath(`/admin/projets/${projectId}`);
   revalidatePath("/admin/projets");
   revalidatePath("/admin/villes");
@@ -128,6 +134,7 @@ export async function deleteProject(projectId: string) {
   const { error } = await supabase.from("projects").delete().eq("id", projectId);
   if (error) throw error;
 
+  await flash("Suppression effectuée");
   revalidatePath("/admin/projets");
   redirect("/admin/projets");
 }
@@ -138,9 +145,9 @@ function storagePathFromUrl(url: string): string | null {
   return i === -1 ? null : url.slice(i + marker.length);
 }
 
-export async function uploadProjectImage(projectId: string, formData: FormData) {
+export async function uploadProjectImage(projectId: string, _prevState: UploadState, formData: FormData): Promise<UploadState> {
   const file = formData.get("file");
-  if (!(file instanceof File) || file.size === 0) return;
+  if (!(file instanceof File) || file.size === 0) return { error: "Aucun fichier sélectionné." };
 
   const supabase = await createClient();
 
@@ -151,7 +158,7 @@ export async function uploadProjectImage(projectId: string, formData: FormData) 
     contentType: file.type || "image/jpeg",
     cacheControl: "3600",
   });
-  if (uploadError) throw uploadError;
+  if (uploadError) return { error: uploadError.message };
 
   const {
     data: { publicUrl },
@@ -165,14 +172,16 @@ export async function uploadProjectImage(projectId: string, formData: FormData) 
   const { error: insertError } = await supabase
     .from("project_images")
     .insert({ project_id: projectId, url: publicUrl, sort_order: count ?? 0 });
-  if (insertError) throw insertError;
+  if (insertError) return { error: insertError.message };
 
   const { data: project } = await supabase.from("projects").select("cover_image_url").eq("id", projectId).maybeSingle();
   if (project && !project.cover_image_url) {
     await supabase.from("projects").update({ cover_image_url: publicUrl }).eq("id", projectId);
   }
 
+  await flash("Enregistrement réussi");
   revalidatePath(`/admin/projets/${projectId}`);
+  return { error: null };
 }
 
 export async function updateImageAlt(projectId: string, imageId: string, formData: FormData) {

@@ -3,6 +3,7 @@ import { Magnetic } from "@/components/site/Magnetic";
 import { PortraitSlot } from "@/components/site/PortraitSlot";
 import { Reveal } from "@/components/site/Reveal";
 import { ZoomImage } from "@/components/site/ZoomImage";
+import { getSiteSettings } from "@/lib/data/settings";
 import { getTeam } from "@/lib/data/team";
 import { pageMetadata } from "@/lib/site";
 
@@ -13,7 +14,40 @@ export const metadata = pageMetadata({
 });
 export const dynamic = "force-dynamic";
 
-const COMPETENCES = ["Architecture", "Urbanisme", "Paysagisme", "Suivi de projets"];
+const COMPETENCES = [
+  {
+    titre: "Études architecturales",
+    description: "Conception de projets architecturaux alliant créativité, fonctionnalité, qualité technique et identité du lieu.",
+  },
+  {
+    titre: "Études techniques",
+    description: "Élaboration des études techniques garantissant la faisabilité, la sécurité et la conformité des projets.",
+  },
+  {
+    titre: "Réhabilitation",
+    description: "Valorisation et transformation du patrimoine bâti par des interventions adaptées aux usages contemporains.",
+  },
+  {
+    titre: "Décoration d'intérieur",
+    description: "Création d'espaces intérieurs esthétiques, fonctionnels et adaptés aux besoins ainsi qu'à l'image de leurs utilisateurs.",
+  },
+  {
+    titre: "Infographie 3D",
+    description: "Réalisation de visualisations photoréalistes permettant d'anticiper et de valoriser chaque projet avant sa réalisation.",
+  },
+  {
+    titre: "Expertise immobilière",
+    description: "Évaluation technique et analyse de biens immobiliers pour accompagner les décisions d'investissement et de gestion.",
+  },
+  {
+    titre: "Planification urbaine",
+    description: "Conception de stratégies d'aménagement durable favorisant un développement urbain cohérent, fonctionnel et inclusif.",
+  },
+  {
+    titre: "Permis de construire",
+    description: "Constitution et suivi des dossiers administratifs en vue de l'obtention des autorisations de construire.",
+  },
+];
 
 const CLIENTS = [
   "Avesig",
@@ -43,7 +77,14 @@ function ClientRow({ hidden = false }: { hidden?: boolean }) {
 }
 
 export default async function AProposPage() {
-  const team = await getTeam();
+  const [team, settings] = await Promise.all([getTeam(), getSiteSettings()]);
+  const gmParagraphes = settings.gm_mot
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+  const gmCitation = gmParagraphes[0] ?? "";
+  const gmAccroche = gmParagraphes.length > 1 ? gmParagraphes[gmParagraphes.length - 1] : null;
+  const gmCorps = gmParagraphes.length > 2 ? gmParagraphes.slice(1, -1) : [];
 
   return (
     <div>
@@ -151,26 +192,25 @@ export default async function AProposPage() {
           >
             Domaines de compétences
           </h2>
-          <div
-            className="grid grid-cols-4 gap-px max-[640px]:grid-cols-1 max-[860px]:grid-cols-2"
-            style={{ background: "rgba(var(--plr),.14)" }}
-          >
-            {COMPETENCES.map((label, i) => (
+          <div className="flex flex-col border-t" style={{ borderColor: "rgba(var(--plr),.14)" }}>
+            {COMPETENCES.map((item, i) => (
               <Reveal
-                key={label}
-                delay={i * 90}
-                className="group px-6.5 pt-8.5 pb-14 transition-colors duration-500"
-                style={{ background: "var(--nk3)" }}
+                key={item.titre}
+                delay={i * 120}
+                className="oba-domaine-row group relative grid grid-cols-[64px_minmax(0,.9fr)_minmax(0,1.3fr)] items-baseline gap-x-8 gap-y-2 border-b py-7.5 pl-6 transition-colors duration-500 max-[860px]:grid-cols-1 max-[860px]:gap-y-3 max-[860px]:pl-5"
+                style={{ borderColor: "rgba(var(--plr),.14)" }}
               >
-                <span className="font-mono text-[14.5px] tracking-[.16em]" style={{ color: "var(--ac)" }}>
-                  {String(i + 1).padStart(2, "0")}
-                </span>
+                <span aria-hidden="true" className="oba-domaine-tick absolute top-0 left-0 h-full w-[2px]" style={{ background: "#EF8B12" }} />
+                <span className="oba-domaine-num font-mono text-[14.5px] tracking-[.16em]">{String(i + 1).padStart(2, "0")}</span>
                 <h3
-                  className="font-display m-0 mt-6.5 group-hover:opacity-90"
-                  style={{ fontSize: "clamp(22px,2.2vw,34px)", lineHeight: 1.08, fontVariationSettings: "'wdth' 78,'wght' 500" }}
+                  className="oba-domaine-title font-display m-0"
+                  style={{ fontSize: "clamp(22px,2.2vw,32px)", lineHeight: 1.08, fontVariationSettings: "'wdth' 78,'wght' 500" }}
                 >
-                  {label}
+                  {item.titre}
                 </h3>
+                <p className="oba-domaine-desc m-0 max-w-[52ch] font-light" style={{ fontSize: "clamp(15.5px,1.1vw,17.5px)", lineHeight: 1.55, color: "var(--pl)" }}>
+                  {item.description}
+                </p>
               </Reveal>
             ))}
           </div>
@@ -181,36 +221,40 @@ export default async function AProposPage() {
       <section className="mx-auto max-w-[1760px] px-10 py-[clamp(80px,11vw,160px)] max-[640px]:px-5 max-[1400px]:px-8">
         <div className="grid grid-cols-[minmax(0,.8fr)_minmax(0,1.2fr)] items-start gap-[clamp(36px,5vw,84px)] max-[1100px]:grid-cols-1">
           <Reveal variant="clip" className="relative max-w-[520px] border" style={{ background: "var(--nk3)", borderColor: "rgba(var(--plr),.16)", aspectRatio: "3/4" } as React.CSSProperties}>
-            <PortraitSlot src={null} label="Portrait d'Armel Adigoun" className="h-full w-full border-0" />
+            <PortraitSlot src={settings.gm_photo_url || null} label={`Portrait de ${settings.gm_nom}`} className="h-full w-full border-0" />
             <span
               className="absolute bottom-0 left-0 px-3.5 py-2.5 font-mono text-[15px] tracking-[.14em] uppercase"
               style={{ background: "#EF8B12", color: "#100F0C" }}
             >
-              Armel Adigoun
+              {settings.gm_nom}
             </span>
           </Reveal>
           <div className="flex max-w-[64ch] flex-col gap-7">
             <p className="m-0 font-mono text-base tracking-[.2em] uppercase" style={{ color: "var(--ac)" }}>
               Le mot du General Manager
             </p>
-            <Reveal delay={0} as="p" className="font-display m-0 italic" style={{ fontSize: "clamp(26px,3vw,46px)", lineHeight: 1.18, fontVariationSettings: "'wdth' 80,'wght' 400" } as React.CSSProperties}>
-              Avec nous, votre cadre de vie et d&apos;activités ne seront plus jamais les mêmes.
-            </Reveal>
-            <Reveal delay={120} as="p" className="m-0 font-light italic" style={{ fontSize: "clamp(18px,1.6vw,24px)", color: "var(--pl)" } as React.CSSProperties}>
-              Dans une simplicité de formes pures, des percées visuelles et lumineuses, de confort naturel –
-              éclairage, ventilation – nous savons redonner goûts et couleurs à votre milieu de vie et
-              d&apos;activités.
-            </Reveal>
-            <Reveal
-              delay={200}
-              as="p"
-              className="font-display m-0 italic"
-              style={{ fontSize: "clamp(22px,2.4vw,36px)", fontVariationSettings: "'wdth' 70,'wght' 400", color: "var(--ac)" } as React.CSSProperties}
-            >
-              Passez du rêve à la Réalité…….
-            </Reveal>
-            <Reveal delay={260} as="p" className="m-0 font-mono text-[15px] tracking-[.18em] uppercase" style={{ color: "var(--pl)" } as React.CSSProperties}>
-              Armel Adigoun – General Manager
+            {gmCitation && (
+              <Reveal delay={0} as="p" className="font-display m-0 italic" style={{ fontSize: "clamp(26px,3vw,46px)", lineHeight: 1.18, fontVariationSettings: "'wdth' 80,'wght' 400" } as React.CSSProperties}>
+                {gmCitation}
+              </Reveal>
+            )}
+            {gmCorps.map((paragraphe, i) => (
+              <Reveal key={i} delay={120 + i * 80} as="p" className="m-0 font-light italic" style={{ fontSize: "clamp(18px,1.6vw,24px)", color: "var(--pl)" } as React.CSSProperties}>
+                {paragraphe}
+              </Reveal>
+            ))}
+            {gmAccroche && (
+              <Reveal
+                delay={200 + gmCorps.length * 80}
+                as="p"
+                className="font-display m-0 italic"
+                style={{ fontSize: "clamp(22px,2.4vw,36px)", fontVariationSettings: "'wdth' 70,'wght' 400", color: "var(--ac)" } as React.CSSProperties}
+              >
+                {gmAccroche}
+              </Reveal>
+            )}
+            <Reveal delay={260 + gmCorps.length * 80} as="p" className="m-0 font-mono text-[15px] tracking-[.18em] uppercase" style={{ color: "var(--pl)" } as React.CSSProperties}>
+              {settings.gm_nom} – {settings.gm_role}
             </Reveal>
           </div>
         </div>
@@ -233,7 +277,7 @@ export default async function AProposPage() {
           <div className="grid gap-[clamp(26px,3.4vw,54px)] max-[640px]:grid-cols-1 max-[1100px]:grid-cols-2 grid-cols-3">
             {team.map((member, i) => (
               <Reveal key={member.id} delay={(i % 3) * 90} as="article">
-                <PortraitSlot src={member.avatarUrl} label={`Portrait — ${member.name}`} />
+                <PortraitSlot src={member.avatarUrl} label={`Portrait — ${member.name}`} grayscaleHover />
                 <h3
                   className="font-display m-0 mt-5 mb-1.5"
                   style={{ fontSize: "clamp(24px,2.2vw,34px)", lineHeight: 1.04, fontVariationSettings: "'wdth' 80,'wght' 500" }}

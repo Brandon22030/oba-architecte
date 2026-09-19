@@ -78,6 +78,41 @@ create table if not exists project_images (
 );
 
 -- ---------------------------------------------------------------------------
+-- actualites : page "Journal" (presse, chantiers, collaborations), gérable
+-- depuis l'écran admin "Actualités". corps est une suite de blocs simples
+-- (paragraphe ou sous-titre), sérialisée depuis un textarea côté admin —
+-- pas d'éditeur riche, juste [{ "type": "paragraphe"|"titre", "texte": "…" }].
+-- ---------------------------------------------------------------------------
+create table if not exists actualites (
+  id uuid primary key default gen_random_uuid(),
+  slug text not null unique,
+  titre text not null,
+  categorie text not null default 'News',
+  date_publication date not null default current_date,
+  extrait text,
+  sujet text,
+  corps jsonb not null default '[]'::jsonb,
+  cover_image_url text,
+  publie boolean not null default false,
+  sort_order int not null default 0,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+-- ---------------------------------------------------------------------------
+-- actualite_images : galerie d'une actualité (couverture référencée
+-- séparément par actualites.cover_image_url, comme pour les projets).
+-- ---------------------------------------------------------------------------
+create table if not exists actualite_images (
+  id uuid primary key default gen_random_uuid(),
+  actualite_id uuid not null references actualites(id) on delete cascade,
+  url text not null,
+  alt text,
+  sort_order int not null default 0,
+  created_at timestamptz not null default now()
+);
+
+-- ---------------------------------------------------------------------------
 -- contact_requests : soumissions du formulaire public (5 champs) + champs de
 -- qualification enrichis manuellement par l'admin après prise de contact.
 -- ---------------------------------------------------------------------------
@@ -119,6 +154,8 @@ alter table villes enable row level security;
 alter table team_members enable row level security;
 alter table projects enable row level security;
 alter table project_images enable row level security;
+alter table actualites enable row level security;
+alter table actualite_images enable row level security;
 alter table contact_requests enable row level security;
 alter table site_settings enable row level security;
 
@@ -139,6 +176,14 @@ create policy "projects_public_read" on projects for select using (publie = true
 drop policy if exists "project_images_public_read" on project_images;
 create policy "project_images_public_read" on project_images for select using (
   exists (select 1 from projects p where p.id = project_images.project_id and p.publie = true)
+);
+
+drop policy if exists "actualites_public_read" on actualites;
+create policy "actualites_public_read" on actualites for select using (publie = true);
+
+drop policy if exists "actualite_images_public_read" on actualite_images;
+create policy "actualite_images_public_read" on actualite_images for select using (
+  exists (select 1 from actualites a where a.id = actualite_images.actualite_id and a.publie = true)
 );
 
 -- Écriture : réservée aux utilisateurs authentifiés (le compte admin créé
@@ -167,6 +212,20 @@ create policy "project_images_admin_read_all" on project_images for select using
 drop policy if exists "project_images_admin_write" on project_images;
 create policy "project_images_admin_write" on project_images for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
 
+drop policy if exists "actualites_admin_read_all" on actualites;
+create policy "actualites_admin_read_all" on actualites for select using (auth.role() = 'authenticated');
+drop policy if exists "actualites_admin_write" on actualites;
+create policy "actualites_admin_write" on actualites for insert with check (auth.role() = 'authenticated');
+drop policy if exists "actualites_admin_update" on actualites;
+create policy "actualites_admin_update" on actualites for update using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
+drop policy if exists "actualites_admin_delete" on actualites;
+create policy "actualites_admin_delete" on actualites for delete using (auth.role() = 'authenticated');
+
+drop policy if exists "actualite_images_admin_read_all" on actualite_images;
+create policy "actualite_images_admin_read_all" on actualite_images for select using (auth.role() = 'authenticated');
+drop policy if exists "actualite_images_admin_write" on actualite_images;
+create policy "actualite_images_admin_write" on actualite_images for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
+
 -- contact_requests : n'importe qui peut déposer une demande (formulaire
 -- public), seul l'admin authentifié peut les lire/traiter — protège les
 -- coordonnées des visiteurs d'une lecture publique.
@@ -192,6 +251,10 @@ insert into storage.buckets (id, name, public)
 values ('team-avatars', 'team-avatars', true)
 on conflict (id) do nothing;
 
+insert into storage.buckets (id, name, public)
+values ('actualite-images', 'actualite-images', true)
+on conflict (id) do nothing;
+
 drop policy if exists "project_images_bucket_public_read" on storage.objects;
 create policy "project_images_bucket_public_read" on storage.objects for select using (bucket_id = 'project-images');
 drop policy if exists "project_images_bucket_admin_write" on storage.objects;
@@ -201,3 +264,8 @@ drop policy if exists "team_avatars_bucket_public_read" on storage.objects;
 create policy "team_avatars_bucket_public_read" on storage.objects for select using (bucket_id = 'team-avatars');
 drop policy if exists "team_avatars_bucket_admin_write" on storage.objects;
 create policy "team_avatars_bucket_admin_write" on storage.objects for all using (bucket_id = 'team-avatars' and auth.role() = 'authenticated') with check (bucket_id = 'team-avatars' and auth.role() = 'authenticated');
+
+drop policy if exists "actualite_images_bucket_public_read" on storage.objects;
+create policy "actualite_images_bucket_public_read" on storage.objects for select using (bucket_id = 'actualite-images');
+drop policy if exists "actualite_images_bucket_admin_write" on storage.objects;
+create policy "actualite_images_bucket_admin_write" on storage.objects for all using (bucket_id = 'actualite-images' and auth.role() = 'authenticated') with check (bucket_id = 'actualite-images' and auth.role() = 'authenticated');

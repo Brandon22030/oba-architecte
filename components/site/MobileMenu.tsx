@@ -7,7 +7,8 @@ const LINKS = [
   { href: "/", label: "Accueil", delay: 0.05 },
   { href: "/a-propos", label: "À propos", delay: 0.12 },
   { href: "/projets", label: "Projets", delay: 0.19 },
-  { href: "/territoire", label: "Territoire", delay: 0.26 },
+  { href: "/actualite", label: "Actualité", delay: 0.26 },
+  { href: "/territoire", label: "Territoire", delay: 0.33 },
   { href: "/contact", label: "Contact", delay: 0.4 },
 ];
 

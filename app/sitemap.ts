@@ -1,14 +1,16 @@
 import type { MetadataRoute } from "next";
+import { getPublishedActualites } from "@/lib/data/actualites";
 import { getPublishedProjects } from "@/lib/data/projects";
 import { SITE_URL } from "@/lib/site";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const projects = await getPublishedProjects();
+  const [projects, actualites] = await Promise.all([getPublishedProjects(), getPublishedActualites()]);
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: SITE_URL, changeFrequency: "monthly", priority: 1 },
     { url: `${SITE_URL}/a-propos`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${SITE_URL}/projets`, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${SITE_URL}/actualite`, changeFrequency: "weekly", priority: 0.7 },
     { url: `${SITE_URL}/territoire`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${SITE_URL}/contact`, changeFrequency: "yearly", priority: 0.6 },
   ];
@@ -19,5 +21,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  return [...staticRoutes, ...projectRoutes];
+  const actualiteRoutes: MetadataRoute.Sitemap = actualites.map((actualite) => ({
+    url: `${SITE_URL}/actualite/${actualite.slug}`,
+    changeFrequency: "monthly",
+    priority: 0.6,
+  }));
+
+  return [...staticRoutes, ...projectRoutes, ...actualiteRoutes];
 }
